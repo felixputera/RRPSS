@@ -2,17 +2,18 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// this is just an example for the alacarteMenu
 // Note : When structure of the Object type (the class file) in the list changed
 // the Serialized file may fail.
 public class IOHandler {
     public static List readSerializedObject(String filename) {
-        List pDetails = null;
+        List mDetails = null;
         FileInputStream fis = null;
         ObjectInputStream in = null;
         try {
             fis = new FileInputStream(filename);
             in = new ObjectInputStream(fis);
-            pDetails = (ArrayList) in.readObject();
+            mDetails = (ArrayList) in.readObject();
             in.close();
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -20,9 +21,9 @@ public class IOHandler {
             ex.printStackTrace();
         }
         // print out the size
-        //System.out.println(" Details Size: " + pDetails.size());
+        //System.out.println(" Details Size: " + mDetails.size());
         //System.out.println();
-        return pDetails;
+        return mDetails;
     }
 
     public static void writeSerializedObject(String filename, List list) {
@@ -42,23 +43,27 @@ public class IOHandler {
     public static void main(String[] args) {
         List list;
         try {
-            // read from serialized file the list of professors
-            list = (ArrayList) IOHandler.readSerializedObject("professor.dat");
-            for (int i = 0; i < list.size(); i++) {
-                //Professor p = (Professor)list.get(i);
-                //System.out.println("name is " + p.getName() );
-                //System.out.println("contact is " + p.getContact() );
-            }
+            list = new ArrayList<AlaCarteMenu>();
 
             // write to serialized file - update/insert/delete
-            // example - add one more professor
-            //Professor p = new Professor("Joseph","jos@ntu.edu.sg",67909999);
+            // example - add one menu
+            AlaCarteMenu m = new AlaCarteMenu(1, "Chocolate fudge", 10, "Dessert");
             // add to list
-            //list.add(p);
+            list.add(m);
             // list.remove(p);  // remove if p equals object in the list
 
-            IOHandler.writeSerializedObject("professor.dat", list);
+            IOHandler.writeSerializedObject("./menu.dat", list);
 
+            list = (ArrayList) IOHandler.readSerializedObject("./menu.dat");
+            // read from serialized file the list of professors
+            for (int i = 0; i < list.size(); i++) {
+                AlaCarteMenu x = (AlaCarteMenu) list.get(i);
+                System.out.println("id is " + x.getId());
+                System.out.println("name is " + x.getName());
+                System.out.println("price is " + x.getPrice());
+                System.out.println("type is " + x.getType());
+
+            }
         } catch (Exception e) {
             System.out.println("Exception >> " + e.getMessage());
         }
