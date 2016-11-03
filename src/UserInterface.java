@@ -1,8 +1,13 @@
 public class UserInterface {
-    //currently main is just used to test AlaCarteManager, remove if necessary
+    //currently main is just used to test classes, remove if necessary
     public static void main(String[] args) {
         AlaCarteManager manage = new AlaCarteManager();
-        manage.addAlaCarte("Choco pie",3,"Snack");
-        manage.printMenu();
+        manage.printAllMenu();
+
+
+        PPackageManager pmanage = new PPackageManager();
+        pmanage.addPackage(19);
+        pmanage.addItemToPackage(3, 2);
+        pmanage.printAllPackage();
     }
 }

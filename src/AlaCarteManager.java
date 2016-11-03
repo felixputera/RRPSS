@@ -9,7 +9,7 @@ public class AlaCarteManager {
         this.menu = (ArrayList) IOHandler.readSerializedObject(FName);
     }
 
-    private int findIndex(int id) {
+    public int findIndex(int id) {
         for (int i = 0; i < menu.size(); i++) {
             if (menu.get(i).getId() == id) return i;
         }
@@ -74,7 +74,7 @@ public class AlaCarteManager {
         }
     }
 
-    public void printMenu() {
+    public void printAllMenu() {
         for (int i = 0; i < menu.size(); i++) {
             AlaCarteMenu x = menu.get(i);
             System.out.println("ID: " + x.getId());
@@ -83,5 +83,23 @@ public class AlaCarteManager {
             System.out.println("Type: " + x.getType());
             System.out.println();
         }
+    }
+
+    //print format might need to be changed
+    public void printSpecificMenu(int id) {
+        int i = findIndex(id);
+        AlaCarteMenu x = menu.get(i);
+        System.out.println("ID: " + x.getId());
+        System.out.println("Name: " + x.getName());
+        System.out.println("Price: $" + x.getPrice());
+        System.out.println("Type: " + x.getType());
+    }
+
+    public AlaCarteMenu getAlaCarteById(int id) {
+        for (AlaCarteMenu m : menu) {
+            if (m.getId() == id) return m;
+        }
+        System.out.println("AlaCarte menu ID not found");
+        return null;
     }
 }
