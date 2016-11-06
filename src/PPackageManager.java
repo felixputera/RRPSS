@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PPackageManager {
-    AlaCarteManager acManage = new AlaCarteManager();
+    private AlaCarteManager acManage = new AlaCarteManager();
     private List<PromoPackage> packageList;
     private String FName = "./promo.dat";
 
@@ -11,7 +11,7 @@ public class PPackageManager {
         this.packageList = (ArrayList) IOHandler.readSerializedObject(FName);
     }
 
-    private int findIndex(int id) {
+    public int findIndex(int id) {
         for (int i = 0; i < packageList.size(); i++) {
             if (packageList.get(i).getId() == id) return i;
         }
@@ -27,7 +27,7 @@ public class PPackageManager {
         }
         PromoPackage p = new PromoPackage(id, price);
         this.packageList.add(p);
-        System.out.println("Created new promotional package");
+        System.out.println("Created new promotional package with ID " + id);
         IOHandler.writeSerializedObject(FName, packageList);
     }
 
@@ -50,6 +50,7 @@ public class PPackageManager {
     }
 
     public void addItemToPackage(int packageId, int alaCarteId) {
+        acManage.refresh();
         int pIndex = findIndex(packageId);
         int mIndex = acManage.findIndex(alaCarteId);
         if (mIndex != -1 && pIndex != -1) {
@@ -62,6 +63,7 @@ public class PPackageManager {
     }
 
     public void removeItemFromPackage(int packageId, int alaCarteId) {
+        acManage.refresh();
         int pIndex = findIndex(packageId);
         int mIndex = acManage.findIndex(alaCarteId);
         if (mIndex != -1 && pIndex != -1) {
@@ -99,5 +101,17 @@ public class PPackageManager {
             System.out.println("-" + acManage.getAlaCarteById(x.getMenuIdList().get(j)).getName());
         }
         System.out.println();
+    }
+
+    public PromoPackage getPromoById(int id) {
+        for (PromoPackage p : packageList) {
+            if (p.getId() == id) return p;
+        }
+        System.out.println("Promotional Package ID not found");
+        return null;
+    }
+
+    public void refresh() {
+        this.packageList = (ArrayList) IOHandler.readSerializedObject(FName);
     }
 }

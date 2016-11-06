@@ -25,7 +25,7 @@ public class AlaCarteManager {
         }
         AlaCarteMenu m = new AlaCarteMenu(id, name, price, type);
         this.menu.add(m);
-        System.out.println("Added entry to menu");
+        System.out.println("Added entry" + name + "to menu with ID " + id);
         IOHandler.writeSerializedObject(FName, menu);
     }
 
@@ -101,5 +101,9 @@ public class AlaCarteManager {
         }
         System.out.println("AlaCarte menu ID not found");
         return null;
+    }
+
+    public void refresh() {
+        this.menu = (ArrayList) IOHandler.readSerializedObject(FName);
     }
 }
