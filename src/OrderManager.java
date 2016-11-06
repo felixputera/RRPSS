@@ -14,8 +14,8 @@ public class OrderManager{
 	}
 	
 	public void printInvoice(int OrderID){
-		OrderList.get(OrderID).printOrder();
-		System.out.println(OrderList.get(OrderID).CalculateTotal());
+		printOrder(OrderID);
+		System.out.println(CalculateTotal(OrderID));
 	}
 	
 	public int findIndex(int id) {
@@ -52,34 +52,42 @@ public class OrderManager{
 	}
 
 	public void removeItemFromOrderAlaCarte(int alaCarteID, int OrderID){
-		OrderList.get(OrderID).removeItemFromAlaCarte(alaCarteID);
+		int oIndex = findIndex(OrderID);
+		int aIndex = AlaManager.findIndex(alaCarteID);
+		if(oIndex != -1 && aIndex != -1){
+			OrderList.get(oIndex).removeItemFromAlaCarte(alaCarteID);
+		}
 	}
 	public void removeItemFromOrderPromo(int packID, int OrderID){
-		OrderList.get(OrderID).removeItemFromPromo(packID);
-	}
-	
-	public void viewOrder(int orderId){
-		OrderList.get(orderId).printOrder();
-	}
-	
-	public float CalculateTotal(){
-		float total = 0;
-		for(int i=0; i < OrderList.get(i).getAlaCarteIDList().size(); i++){
-			total = total + .getPrice();
+		int oIndex = findIndex(OrderID);
+		int pIndex = PackManager.findIndex(packID);
+		if(oIndex != -1 && pIndex != -1){
+			OrderList.get(oIndex).removeItemFromPromo(packID);
 		}
-		for(int i=0; i< PackageList.size(); i++){
-			total = total + PackageList.get(i).getPrice();
+	}
+	
+	public float CalculateTotal(int OrderID){
+		float total = 0;
+		int oIndex = findIndex(OrderID);
+		for(int i=0; i < OrderList.get(oIndex).getAlaCarteIDList().size(); i++){
+			total = total + AlaManager.getAlaCarteById(OrderList.get(oIndex).getAlaCarteIDList().get(i)).getPrice();
+		}
+		for(int i=0; i< OrderList.get(oIndex).getPackageIDList().size(); i++){
+			total = total + PackManager.getPromoById(OrderList.get(oIndex).getPackageIDList().get(i)).getPrice();
 		}
 		
 		return total;
 	}
 	
-	public void printOrder(){
-		for(int i=0; i < AlaCarteList.size(); i++){
-			System.out.println(AlaCarteList.get(i).getName() + " " + AlaCarteList.get(i).getPrice());
+	public void printOrder(int OrderID){
+		int oIndex = findIndex(OrderID);
+		List <Integer> AlaIDList = OrderList.get(oIndex).getAlaCarteIDList();
+		for(int i=0; i < AlaIDList.size(); i++){
+			System.out.println(AlaManager.getAlaCarteById(AlaIDList.get(i)).getName() + " " + AlaManager.getAlaCarteById(AlaIDList.get(i)).getPrice());
 		}
-		for(int i=0; i< PackageList.size(); i++){
-			System.out.println("Package " + PackageList.get(i).getId() + " " + PackageList.get(i).getPrice());
+		List <Integer> PromoIDList = OrderList.get(oIndex).getPackageIDList(); 
+		for(int i=0; i< PromoIDList.size(); i++){
+			System.out.println("Package " + PromoIDList + " " + PackManager.getPromoById(OrderList.get(oIndex).getPackageIDList().get(i)).getPrice());
 		}
 	}
 	
@@ -87,14 +95,14 @@ public class OrderManager{
 		String strDate = period.toString();
 		for(int i=0; i < OrderList.size(); i++){
 			if(strDate == OrderList.get(i).getDateTime().toString()){
-				System.out.println(OrderList.get(i).CalculateTotal());
+				System.out.println(CalculateTotal(OrderList.get(i).getOrderID()));
 			}
 		}
 	}
 	public void SalesRevenueReport(int month){
 		for(int i=0; i<OrderList.size(); i++){
 			if(OrderList.get(i).getDateTime().get(Calendar.MONTH) == month){
-				System.out.println(OrderList.get(i).CalculateTotal());
+				System.out.println(CalculateTotal(OrderList.get(i).getOrderID()));
 			}
 		}
 	}
