@@ -27,7 +27,7 @@ public class PPackageManager {
         }
         PromoPackage p = new PromoPackage(id, price);
         this.packageList.add(p);
-        System.out.println("Created new promotional package");
+        System.out.println("Created new promotional package with ID " + id);
         IOHandler.writeSerializedObject(FName, packageList);
     }
 
