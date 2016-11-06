@@ -6,8 +6,8 @@ public class Table implements Serializable {
     private int size;
     private int status[][][] = new int[12][31][2];
 
-    public Table(int id, int size) {
-        this.tableID = id;
+    public Table(int tableID, int size) {
+        this.tableID = tableID;
         this.size = size;
         for (int i = 0; i < 12; i++)
         	for (int j = 0; i < 31; j++)
@@ -19,8 +19,8 @@ public class Table implements Serializable {
         return this.tableID;
     }
 
-    public void setTableID(int id) {
-        this.tableID = id;
+    public void setTableID(int tableID) {
+        this.tableID = tableID;
     }
 
     public int getSize() {
