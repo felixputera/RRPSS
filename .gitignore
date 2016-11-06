@@ -8,5 +8,5 @@ out/
 
 #Eclipse
 bin/
-.classpth
+.classpath
 .project
