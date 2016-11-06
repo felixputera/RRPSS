@@ -5,4 +5,8 @@ hs_err_pid*
 .idea/
 RRPSS.iml
 out/
-/bin/
+
+#Eclipse
+bin/
+.classpth
+.project
