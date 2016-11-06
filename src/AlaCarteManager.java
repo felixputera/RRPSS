@@ -102,4 +102,8 @@ public class AlaCarteManager {
         System.out.println("AlaCarte menu ID not found");
         return null;
     }
+
+    public void refresh() {
+        this.menu = (ArrayList) IOHandler.readSerializedObject(FName);
+    }
 }

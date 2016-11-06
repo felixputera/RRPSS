@@ -50,6 +50,7 @@ public class PPackageManager {
     }
 
     public void addItemToPackage(int packageId, int alaCarteId) {
+        acManage.refresh();
         int pIndex = findIndex(packageId);
         int mIndex = acManage.findIndex(alaCarteId);
         if (mIndex != -1 && pIndex != -1) {
@@ -62,6 +63,7 @@ public class PPackageManager {
     }
 
     public void removeItemFromPackage(int packageId, int alaCarteId) {
+        acManage.refresh();
         int pIndex = findIndex(packageId);
         int mIndex = acManage.findIndex(alaCarteId);
         if (mIndex != -1 && pIndex != -1) {
@@ -107,5 +109,9 @@ public class PPackageManager {
         }
         System.out.println("Promotional Package ID not found");
         return null;
+    }
+
+    public void refresh() {
+        this.packageList = (ArrayList) IOHandler.readSerializedObject(FName);
     }
 }
