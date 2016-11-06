@@ -9,5 +9,9 @@ public class UserInterface {
         pmanage.addPackage(19);
         pmanage.addItemToPackage(3, 2);
         pmanage.printAllPackage();
+        
+        OrderManager manager = new OrderManager();
+        manager.createOrder();
+        manager.
     }
 }
