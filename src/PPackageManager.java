@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PPackageManager {
-    AlaCarteManager acManage = new AlaCarteManager();
+    private AlaCarteManager acManage = new AlaCarteManager();
     private List<PromoPackage> packageList;
     private String FName = "./promo.dat";
 
