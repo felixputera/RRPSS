@@ -100,4 +100,12 @@ public class PPackageManager {
         }
         System.out.println();
     }
+
+    public PromoPackage getPromoById(int id) {
+        for (PromoPackage p : packageList) {
+            if (p.getId() == id) return p;
+        }
+        System.out.println("Promotional Package ID not found");
+        return null;
+    }
 }
