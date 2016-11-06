@@ -11,7 +11,7 @@ public class PPackageManager {
         this.packageList = (ArrayList) IOHandler.readSerializedObject(FName);
     }
 
-    private int findIndex(int id) {
+    public int findIndex(int id) {
         for (int i = 0; i < packageList.size(); i++) {
             if (packageList.get(i).getId() == id) return i;
         }
