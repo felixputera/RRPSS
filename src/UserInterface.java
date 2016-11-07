@@ -80,10 +80,10 @@ public class UserInterface {
                 case 8: checkAvailability();
                     break;
 
-                case 9: printOrderInvoice();
+                case 9: manage.printAllMenu(); //printOrderInvoice();
                     break;
 
-                case 10: printSaleReport();
+                case 10: pmanage.printAllPackage();//printSaleReport();
                     break;
 
                 default: System.out.println("Please choose another option\n");
@@ -94,7 +94,8 @@ public class UserInterface {
     }
 
     public static void modifyMenu(){
-        System.out.print("1. New menu; 2. Update menu; 3.Remove menu");
+        System.out.println("1. New menu; 2. Update menu; 3.Remove menu");
+        System.out.print("Input: ");
         int choice = sc.nextInt();
 
         String name;
@@ -106,19 +107,22 @@ public class UserInterface {
         switch (choice) {
             case 1:
                 System.out.print("Menu name to add: ");
+                sc.nextLine(); //clear buffer
                 name = sc.nextLine();
 
                 System.out.print("Input price: ");
                 price = sc.nextFloat();
 
                 System.out.print("Input menu type: ");
+                sc.nextLine(); //clear buffer
                 type = sc.nextLine();
 
                 manage.addAlaCarte(name, price, type);
                 break;
 
             case 2:
-                System.out.print("1. Update price; 2. Update name; 3. Update type; 4. Update desc");
+                System.out.println("1. Update price; 2. Update name; 3. Update type; 4. Update desc");
+                System.out.print("Input: ");
                 choice = sc.nextInt();
 
                 switch (choice){
@@ -137,6 +141,7 @@ public class UserInterface {
                         id = sc.nextInt();
 
                         System.out.print("New name: ");
+                        sc.nextLine(); //clear buffer
                         name = sc.nextLine();
 
                         manage.updateName(id, name);
@@ -146,6 +151,7 @@ public class UserInterface {
                         id = sc.nextInt();
 
                         System.out.print("New type: ");
+                        sc.nextLine(); //clear buffer
                         type = sc.nextLine();
 
                         manage.updateType(id, type);
@@ -155,6 +161,7 @@ public class UserInterface {
                         id = sc.nextInt();
 
                         System.out.print("New description: ");
+                        sc.nextLine(); //clear buffer
                         desc = sc.nextLine();
 
                         manage.updateDesc(id, desc);
@@ -171,7 +178,8 @@ public class UserInterface {
     }
 
     public static void modifyPackage(){
-        System.out.print("1. New promotion; 2. Update promotion; 3.Remove promotion");
+        System.out.println("1. New promotion; 2. Update promotion; 3.Remove promotion");
+        System.out.print("Input: ");
         int choice = sc.nextInt();
 
         int pid;
@@ -187,7 +195,8 @@ public class UserInterface {
                 break;
 
             case 2:
-                System.out.print("1. Add item to a package; 2. Update package price; 3. Remove item from a package");
+                System.out.println("1. Add item to a package; 2. Update package price; 3. Remove item from a package");
+                System.out.print("Input: ");
                 choice = sc.nextInt();
 
                 switch (choice){
@@ -241,6 +250,7 @@ public class UserInterface {
 
     public static void createReservation(){
         System.out.print("Date & Time to reserve (MM-dd-yyyy HH:mm): ");
+        sc.nextLine(); //clear buffer
         String dateString = sc.nextLine();
         Date dateTime = null;
 
@@ -257,6 +267,7 @@ public class UserInterface {
         int pax = sc.nextInt();
 
         System.out.print("Under the name of: ");
+        sc.nextLine(); //clear buffer
         String name = sc.nextLine();
 
         System.out.print("Contact number: ");
@@ -267,7 +278,8 @@ public class UserInterface {
     }
 
     public static void modifyReservation(){
-        System.out.print("1. Check specific reservation; 2. Check all reservation; 3. Remove reservation");
+        System.out.println("1. Check specific reservation; 2. Check all reservation; 3. Remove reservation");
+        System.out.print("Input: ");
         int choice = sc.nextInt();
 
         int contactNo;
@@ -294,14 +306,14 @@ public class UserInterface {
     }
 
     public static void checkAvailability(){
-        System.out.print("1. Check by ID; 2. Check by size; 3. Check all tables");
+        System.out.println("1. Check by ID; 2. Check by size; 3. Check all tables");
+        System.out.print("Input: ");
         int choice = sc.nextInt();
 
         int tid;
         int size;
         Date dateTime = null;
         String dateString;
-        Calendar now = Calendar.getInstance();
 
         switch (choice){
             case 1: System.out.print("Table ID: ");
@@ -311,7 +323,9 @@ public class UserInterface {
                 choice = sc.nextInt();
 
                 switch(choice){
-                    case 1: System.out.print("Date & Time (MM-dd-yyyy HH:mm): ");
+                    case 1: System.out.println("Date & Time (MM-dd-yyyy HH:mm): ");
+                        System.out.print("Input: ");
+                        sc.nextLine(); //clear buffer
                         dateString = sc.nextLine();
 
                         try {
@@ -322,11 +336,12 @@ public class UserInterface {
                         }
 
                         c.setTime(dateTime);
-
+                        tm.refresh();
                         tm.checkAvailabilityByID(tid, c);
                         break;
 
-                    case 2: tm.checkAvailabilityByID(tid, now);
+                    case 2: tm.refresh();
+                        tm.checkAvailabilityByID(tid, Calendar.getInstance());
                         break;
                 }
 
@@ -339,7 +354,9 @@ public class UserInterface {
                 choice = sc.nextInt();
 
                 switch(choice){
-                    case 1: System.out.print("Date & Time (MM-dd-yyyy HH:mm): ");
+                    case 1: System.out.println("Date & Time (MM-dd-yyyy HH:mm): ");
+                        System.out.print("Input: ");
+                        sc.nextLine(); //clear buffer
                         dateString = sc.nextLine();
 
                         try {
@@ -350,21 +367,24 @@ public class UserInterface {
                         }
 
                         c.setTime(dateTime);
-
+                        tm.refresh();
                         tm.checkAvailabilityBySize(size, c);
                         break;
 
-                    case 2: tm.checkAvailabilityBySize(size, now);
+                    case 2: tm.refresh();
+                        tm.checkAvailabilityBySize(size, Calendar.getInstance());
                         break;
                 }
 
                 break;
 
-            case 3: System.out.print("1. Insert Date & Time ; 2. Use current time");
+            case 3: System.out.println("1. Insert Date & Time ; 2. Use current time");
+                System.out.print("Input: ");
                 choice = sc.nextInt();
 
                 switch(choice){
                     case 1: System.out.print("Date & Time (MM-dd-yyyy HH:mm): ");
+                        sc.nextLine(); //clear buffer
                         dateString = sc.nextLine();
 
                         try {
@@ -375,12 +395,13 @@ public class UserInterface {
                         }
 
                         c.setTime(dateTime);
-
+                        tm.refresh();
                         tm.checkAllTableAvailability(c);
                         break;
 
-                    case 2: tm.checkAllTableAvailability(now);
-                    break;
+                    case 2: tm.refresh();
+                        tm.checkAllTableAvailability(Calendar.getInstance());
+                        break;
                 }
 
                 break;
