@@ -87,8 +87,7 @@ public class ReservationManager {
             if ((r.getDateTime().getTime().getTime() / 1000 - now.getTime().getTime() / 1000) < -1800) {
                 System.out.println("Reservation w/ contact number " + r.getContactNumber() +
                         " has been canceled (30 mins passed)");
-                iter.remove();
-                IOHandler.writeSerializedObject(FName, reserveList);
+                removeReservation(r.getContactNumber());
             }
         }
     }
