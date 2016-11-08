@@ -1,4 +1,4 @@
-1import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class OrderManager{
 	
 	public int findIndex(int id) {
         for (int i = 0; i < orderList.size(); i++) {
-            if (orderList.get(i).getorderId() == id) return i;
+            if (orderList.get(i).getOrderId() == id) return i;
         }
         System.out.println("Order ID not found");
         return -1;
@@ -42,7 +42,7 @@ public class OrderManager{
 					id = 1;
 				}
 				else{
-					id = orderList.get(orderList.size() - 1).getorderId() + 1;
+					id = orderList.get(orderList.size() - 1).getOrderId() + 1;
 				}
 				Order o = new Order(id, cal, tableId, sId);
 				orderList.add(o);
@@ -101,10 +101,10 @@ public class OrderManager{
 	public void removeItemFromOrderPromo(int orderId, int packId){
 		packManager.refresh();
 		int oIndex = findIndex(orderId);
-		int pIndex = packManager.findIndex(packID);
+		int pIndex = packManager.findIndex(packId);
 		if(oIndex != -1 && pIndex != -1){
 			if(orderList.get(oIndex).getPackageIdList().contains(packId)){
-				orderList.get(oIndex).removeItemFromPromo(packID);
+				orderList.get(oIndex).removeItemFromPromo(packId);
 				System.out.println("Promotional Package item deleted from order");
 				IOHandler.writeSerializedObject(FName, orderList);
 			}
@@ -145,7 +145,7 @@ public class OrderManager{
 		for(int i=0; i< promoIdList.size(); i++){
 			String name = "Package " + promoIdList.get(i);
 			float price = packManager.getPromoById(promoIdList.get(i)).getPrice();
-			int quantity = orderList.get(oIndex).getAmountPackageId(promoIdlest.get(i));
+			int quantity = orderList.get(oIndex).getAmountPackageId(promoIdList.get(i));
 			System.out.println(name + " " + quantity + " " + price * quantity);
 		}
 	}
@@ -153,7 +153,7 @@ public class OrderManager{
 	public void printInvoice(int orderId){
 		int oIndex = findIndex(orderId);
 		int tableId = orderList.get(oIndex).getTableId();
-		Calender cal = orderList.get(oIndex).getDateTime();
+		Calendar cal = orderList.get(oIndex).getDateTime();
 		double total;
 		System.out.println("	Delicious Food Restaurant	");
 		System.out.println("		12 Newton Street		");
@@ -174,9 +174,9 @@ public class OrderManager{
 		tManager.updateStatus(cal, tableId, 0);
 	}
 	
-	public void SalesRevenueReport(Date period){
-		int amountAlaCarte[] = new int(100);
-		int amountPackage[] = new int(100);
+	public void SalesRevenueReport(Calendar period){
+		int amountAlaCarte[] = new int[100];
+		int amountPackage[] = new int[100];
 		String strDate = period.toString();
 		float total = 0;
 		System.out.println(strDate);
@@ -184,11 +184,11 @@ public class OrderManager{
 			if(strDate == orderList.get(i).getDateTime().toString()){
 				total = total + CalculateTotal(orderList.get(i).getOrderId());
 				for(int j=0; j < orderList.get(i).getAlaCarteIdList().size(); j++){
-					List <integer> alaCarte = orderList.get(i).getAlaCarteIdList();
+					List <Integer> alaCarte = orderList.get(i).getAlaCarteIdList();
 					amountAlaCarte[alaCarte.get(j)] += orderList.get(i).getAmountAlaCarteId(alaCarte.get(j));
 				}
 				for(int j=0; j < orderList.get(i).getPackageIdList().size(); j++){
-					List <integer> promo = orderList.get(i).getPackageIdList();
+					List <Integer> promo = orderList.get(i).getPackageIdList();
 					amountPackage[promo.get(j)] += orderList.get(i).getAmountPackageId(promo.get(j));
 				}
 			}
@@ -204,19 +204,19 @@ public class OrderManager{
 	}
 	
 	public void SalesRevenueReport(int month){
-		int amountAlaCarte[] = new int(100);
-		int amountPackage[] = new int(100);
+		int amountAlaCarte[] = new int[100];
+		int amountPackage[] = new int[100];
 		float total = 0;
 		System.out.println("Month " + month);
 		for(int i=0; i<orderList.size(); i++){
 			if(orderList.get(i).getDateTime().get(Calendar.MONTH) == month){
 				total = total + CalculateTotal(orderList.get(i).getOrderId());
 				for(int j=0; j < orderList.get(i).getAlaCarteIdList().size(); j++){
-					List <integer> alaCarte = orderList.get(i).getAlaCarteIdList();
+					List <Integer> alaCarte = orderList.get(i).getAlaCarteIdList();
 					amountAlaCarte[alaCarte.get(j)] += orderList.get(i).getAmountAlaCarteId(alaCarte.get(j));
 				}
 				for(int j=0; j < orderList.get(i).getPackageIdList().size(); j++){
-					List <integer> promo = orderList.get(i).getPackageIdList();
+					List <Integer> promo = orderList.get(i).getPackageIdList();
 					amountPackage[promo.get(j)] += orderList.get(i).getAmountPackageId(promo.get(j));
 				}
 			}
