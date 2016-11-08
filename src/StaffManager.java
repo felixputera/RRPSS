@@ -19,7 +19,7 @@ public class StaffManager {
 		return -1;
 	}
 	
-	public void addStaff(String sname, boolean sgender, String title){
+	public void addStaff(String sname, String sgender, String title){
 		int id;
 		if(staffList.isEmpty()){
 			id = 1;
@@ -29,7 +29,7 @@ public class StaffManager {
 		}
 		Staff s = new Staff(sname, sgender, id, title);
 		this.staffList.add(s);
-		System.out.println("Hired new employee with ID" + id);
+		System.out.println("Hired new employee with ID " + id);
 		IOHandler.writeSerializedObject(FName, staffList);
 	}
 	
@@ -39,6 +39,17 @@ public class StaffManager {
 			staffList.remove(i);
 			System.out.println("Fired staff" + id);
 			IOHandler.writeSerializedObject(FName, staffList);
+		}
+	}
+
+	public void printAllStaff(){
+		for (int i = 0; i < staffList.size(); i++) {
+			Staff s = staffList.get(i);
+			System.out.println("Staff ID: " + s.getEmployeeId());
+			System.out.print("Name: " + s.getName());
+			System.out.println("Gender: " + s.getGender());
+			System.out.println("Job Title : " + s.getJobTitle());
+			System.out.println();
 		}
 	}
 	

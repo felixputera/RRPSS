@@ -24,6 +24,7 @@ public class OrderManager{
 	
 	public void createOrder(int pax, int sId){
 		int id;
+		sManager.refresh();
 		Calendar cal = Calendar.getInstance();
 		if(tManager.resIsOpen(cal)){
 			int tableId = tManager.findEmptyTable(pax, cal);
@@ -54,6 +55,7 @@ public class OrderManager{
 	}
 	
 	public void removeOrder(int id){
+		sManager.refresh();
 		int i = findIndex(id);
 		if(i != -1){
 			orderList.remove(i);
@@ -158,10 +160,19 @@ public class OrderManager{
 		System.out.println("	Delicious Food Restaurant	");
 		System.out.println("		12 Newton Street		");
 		System.out.println("		   Singapore			");
+		System.out.println("");
 		System.out.println("		Tel: 123-456-7000		");
-		System.out.println("			Order ID: " + orderId);
-		System.out.println("			Table ID: " + tableId);
-		System.out.println("		  " + Calendar.getInstance());
+		System.out.println("		 Order ID: " + orderId);
+		System.out.println("		 Table ID: " + tableId);
+		System.out.println("___________________________________");
+		Calendar timestamp = Calendar.getInstance();
+		int year = timestamp.get(Calendar.YEAR);
+		int month = timestamp.get(Calendar.MONTH);      // NOTE!!! : Month from 0 to 11
+		int day = timestamp.get(Calendar.DAY_OF_MONTH);
+		int hour = timestamp.get(Calendar.HOUR_OF_DAY);
+		int minute = timestamp.get(Calendar.MINUTE);
+		int second = timestamp.get(Calendar.SECOND);
+		System.out.println("		  " + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second);
 		this.viewOrder(orderId);
 		total = CalculateTotal(orderId);
 		System.out.println("Subtotal.....		" + total);
@@ -169,19 +180,19 @@ public class OrderManager{
 		total = total + 0.1 * total;
 		System.out.println("7%GST				" + 0.07 * total);
 		total = total + 0.07 * total;
+		System.out.println("___________________________________");
 		System.out.println("Total				" + total);
 		
 		tManager.updateStatus(cal, tableId, 0);
 	}
 	
-	public void SalesRevenueReport(Calendar period){
+	public void salesRevenueReport(int year, int month, int day){
 		int amountAlaCarte[] = new int[100];
 		int amountPackage[] = new int[100];
-		String strDate = period.toString();
 		float total = 0;
-		System.out.println(strDate);
+		System.out.println(year + "-" + month + "-" + day);
 		for(int i=0; i < orderList.size(); i++){
-			if(strDate == orderList.get(i).getDateTime().toString()){
+			if(year == orderList.get(i).getDateTime().get(Calendar.YEAR) && month == orderList.get(i).getDateTime().get(Calendar.MONTH) && day == orderList.get(i).getDateTime().get(Calendar.DAY_OF_MONTH)){
 				total = total + CalculateTotal(orderList.get(i).getOrderId());
 				for(int j=0; j < orderList.get(i).getAlaCarteIdList().size(); j++){
 					List <Integer> alaCarte = orderList.get(i).getAlaCarteIdList();
@@ -203,7 +214,7 @@ public class OrderManager{
 		}
 	}
 	
-	public void SalesRevenueReport(int month){
+	public void salesRevenueReport(int month){
 		int amountAlaCarte[] = new int[100];
 		int amountPackage[] = new int[100];
 		float total = 0;

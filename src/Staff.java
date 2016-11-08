@@ -4,13 +4,13 @@ import java.util.List;
 
 public class Staff implements Serializable{
 	private String name;
-	private boolean gender;
+	private String gender;
 	private int employeeId;
 	private String jobTitle;
 	
-	public Staff(String Sname, boolean Sgender, int id, String title){
+	public Staff(String Sname, String sgender, int id, String title){
 		this.name = Sname;
-		this.gender = Sgender;
+		this.gender = sgender;
 		this.employeeId = id;
 		this.jobTitle = title;
 	}
@@ -23,11 +23,11 @@ public class Staff implements Serializable{
 		this.name = sname;
 	}
 	
-	public boolean getGender(){
+	public String getGender(){
 		return gender;
 	}
 	
-	public void setGender(boolean sgender){
+	public void setGender(String sgender){
 		this.gender = sgender;
 	}
 	

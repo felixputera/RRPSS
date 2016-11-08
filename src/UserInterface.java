@@ -12,8 +12,8 @@ public class UserInterface {
     static Calendar c = Calendar.getInstance();
     static ReservationManager rm = new ReservationManager();
     static SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
-    //static OrderManager om = new OrderManager();
-    //static StaffManager sm = new StaffManager();
+    static OrderManager om = new OrderManager();
+    static StaffManager sm = new StaffManager();
     //currently main is just used to test classes, remove if necessary
     public static void main(String[] args) {
 
@@ -33,8 +33,9 @@ public class UserInterface {
                     "11. (Admin) Print sale revenue report by period (eg day or month)\n" +
                     "12. (Admin) Create/Update/Remove menu item\n" +
                     "13. (Admin) Create/Update/Remove promotion\n" +
-                    "14. (Admin) Hire staff\n" +
-                    "15. (Admin) Fire staff" );
+                    "14. (Admin) View all staff\n" +
+                    "15. (Admin) Hire staff\n" +
+                    "16. (Admin) Fire staff" );
 
             System.out.print("Input: ");
 
@@ -79,9 +80,14 @@ public class UserInterface {
                 case 13: modifyPackage();
                     break;
 
-                case 14: break;
+                case 14: viewAllStaff();
+                    break;
 
-                case 15: break;
+                case 15: hireStaff();
+                    break;
+
+                case 16: fireStaff();
+                    break;
 
                 default: System.out.println("Please choose another option\n");
                     break;
@@ -234,7 +240,7 @@ public class UserInterface {
     }
 
     public static void createOrder(){
-        /*System.out.println("1. Not reserved yet; 2. Have reserved before");
+        System.out.println("1. Not reserved yet; 2. Have reserved before");
         System.out.print("Input: ");
         int choice = sc.nextInt();
 
@@ -250,56 +256,73 @@ public class UserInterface {
                 staffId = sc.nextInt();
 
                 om.createOrder(pax, staffId);
+                om.refresh();
                 break;
 
             case 2:
                 break;
-        }*/
+        }
     }
 
     public static void viewOrder(){
-       /* System.out.print("View order with ID: ");
+        System.out.print("View order with ID: ");
         int oid = sc.nextInt();
 
-        om.viewOrder(oid);*/
+        om.refresh();
+        om.viewOrder(oid);
     }
 
     public static void modifyOrder(){
-      /*  System.out.println("1. Add menu item; 2. Add promotion item; 3. Remove menu item; 4. Remove promotion item");
+        System.out.print("Order ID to modify: ");
+        int oid = sc.nextInt();
+
+        System.out.println("1. Add menu item; 2. Add promotion item; 3. Remove menu item; 4. Remove promotion item\n" +
+                "5. EXIT modifying order");
+        System.out.print("Input: ");
         int choice = sc.nextInt();
 
-        int oid;
         int menuId;
         int pid;
 
-        switch (choice){
-            case 1: System.out.print("Order ID: ");
-                oid = sc.nextInt();
+        while(choice!=5) {
+            switch (choice) {
+                case 1: System.out.print("Menu item ID to add: ");
+                    menuId = sc.nextInt();
 
-                System.out.print("Menu item ID to add: ");
-                menuId = sc.nextInt();
+                    om.addItemToOrderAlaCarte(menuId, oid);
+                    om.refresh();
+                    break;
 
-                om.addItemToOrderAlaCarte(menuId, oid);
-                break;
+                case 2: System.out.print("Menu item ID to remove: ");
+                    menuId = sc.nextInt();
 
-            case 2: System.out.print("Order ID: ");
-                oid = sc.nextInt();
+                    om.removeItemFromOrderAlaCarte(menuId, oid);
+                    om.refresh();
+                    break;
 
-                System.out.print("Menu item ID to remove: ");
-                menuId = sc.nextInt();
+                case 3: System.out.print("Package ID to add: ");
+                    pid = sc.nextInt();
 
-                om.removeItemFromOrderAlaCarte(menuId, oid);
-                break;
+                    om.addItemToOrderPromo(pid, oid);
+                    om.refresh();
+                    break;
 
-            case 3: System.out.print("Order ID: ");
-                oid = sc.nextInt();
+                case 4: System.out.print("Package ID to remove: ");
+                    pid = sc.nextInt();
 
-                System.out.print("Menu item ID: ");
-                menuId = sc.nextInt();
+                    om.removeItemFromOrderPromo(pid, oid);
+                    om.refresh();
+                    break;
 
-                om.addItemToOrderAlaCarte(menuId, oid);
-                break;
-        }*/
+                default: System.out.print("Choose another option.");
+                    break;
+            }
+
+            System.out.println("1. Add menu item; 2. Add promotion item; 3. Remove menu item; 4. Remove promotion item\n" +
+                    "5. EXIT modifying order");
+            System.out.print("Input: ");
+            choice = sc.nextInt();
+        }
     }
 
     public static void createReservation(){
@@ -472,10 +495,68 @@ public class UserInterface {
     }
 
     public static void printOrderInvoice(){
+        System.out.print("Please Enter Order ID: ");
+        int oid = sc.nextInt();
 
+        om.refresh();
+        om.printInvoice(oid);
     }
 
     public static void printSaleReport(){
+        System.out.println("Print Sales Report in 1. Month; 2. Period");
+        System.out.print("Input: ");
+        int choice = sc.nextInt();
 
+        int year;
+        int month;
+        int day;
+
+        switch(choice){
+            case 1: System.out.print("Month (0 to 11): ");
+                month = sc.nextInt();
+
+                om.refresh();
+                om.salesRevenueReport(month);
+                break;
+
+            case 2: System.out.print("Year Month Day: ");
+                year = sc.nextInt();
+                month = sc.nextInt();
+                day = sc.nextInt();
+
+                om.refresh();
+                om.salesRevenueReport(year, month, day);
+                break;
+        }
+    }
+
+    public static void viewAllStaff(){
+        sm.refresh();
+        sm.printAllStaff();
+    }
+
+    public static void hireStaff(){
+        System.out.println("Name of new staff: ");
+        sc.nextLine(); // clear buffer
+        String name = sc.nextLine();
+
+        System.out.print("Gender (Male or Female): ");
+        String sex = sc.next();
+
+        System.out.print("Title/Position: ");
+        sc.nextLine(); // clear buffer
+        String title = sc.nextLine();
+
+        sm.addStaff(name, sex, title);
+        sm.refresh();
+    }
+
+    public static void fireStaff(){
+        System.out.println("Staff ID fired: ");
+        sc.nextLine(); // clear buffer
+        int id = sc.nextInt();
+
+        sm.removeStaff(id);
+        sm.refresh();
     }
 }

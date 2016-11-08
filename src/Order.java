@@ -18,6 +18,10 @@ public class Order implements Serializable {
 		this.dateTime = reserve;
 		this.tableId = tId;
 		this.staffId = sId;
+		for(int i = 0; i < 100; i++){
+			amountAlaCarteId[i] = 0;
+			amountPackageId[i] = 0;
+		}
 	}
 	
 	public int getOrderId(){
@@ -69,6 +73,7 @@ public class Order implements Serializable {
 	}
 	
 	public void addItemToAlaCarte(int alaCarteId){
+		System.out.println(amountAlaCarteId[alaCarteId]);
 		if(amountAlaCarteId[alaCarteId] == 0){
 			this.alaCarteIdList.add(alaCarteId);
 		}
