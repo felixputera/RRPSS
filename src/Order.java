@@ -89,10 +89,10 @@ public class Order implements Serializable {
 		}
 	}
 	
-	public void removeItemFromPromo(int PromoID){
+	public void removeItemFromPromo(int promoId){
 		amountPackageId[promoId] = amountPackageId[promoId] - 1;
 		if(amountPackageId[promoId] == 0){
-			packageIdList.remove(PromoID);
+			packageIdList.remove(promoId);
 		}
 	}
 }

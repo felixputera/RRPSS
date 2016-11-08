@@ -5,7 +5,7 @@ import java.util.List;
 public class Staff implements Serializable{
 	private String name;
 	private boolean gender;
-	private int employeeID;
+	private int employeeId;
 	private String jobTitle;
 	
 	public Staff(String Sname, boolean Sgender, int id, String title){
