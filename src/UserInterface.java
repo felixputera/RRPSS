@@ -255,11 +255,17 @@ public class UserInterface {
                 System.out.print("Staff ID: ");
                 staffId = sc.nextInt();
 
-                om.createOrder(pax, staffId);
+                om.createOrderNoReservation(pax, staffId);
                 om.refresh();
                 break;
 
-            case 2:
+            case 2: System.out.print("Contact Number: ");
+                contactNo = sc.nextInt();
+
+                System.out.print("Staff ID: ");
+                staffId = sc.nextInt();
+
+                om.createOrderReservation(contactNo, staffId);
                 break;
         }
     }
@@ -536,7 +542,7 @@ public class UserInterface {
     }
 
     public static void hireStaff(){
-        System.out.println("Name of new staff: ");
+        System.out.print("Name of new staff: ");
         sc.nextLine(); // clear buffer
         String name = sc.nextLine();
 
@@ -552,7 +558,7 @@ public class UserInterface {
     }
 
     public static void fireStaff(){
-        System.out.println("Staff ID fired: ");
+        System.out.print("Staff ID fired: ");
         sc.nextLine(); // clear buffer
         int id = sc.nextInt();
 

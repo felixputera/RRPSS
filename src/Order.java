@@ -73,7 +73,6 @@ public class Order implements Serializable {
 	}
 	
 	public void addItemToAlaCarte(int alaCarteId){
-		System.out.println(amountAlaCarteId[alaCarteId]);
 		if(amountAlaCarteId[alaCarteId] == 0){
 			this.alaCarteIdList.add(alaCarteId);
 		}

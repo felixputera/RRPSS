@@ -37,16 +37,19 @@ public class StaffManager {
 		int i = findIndex(id);
 		if(i != -1){
 			staffList.remove(i);
-			System.out.println("Fired staff" + id);
+			System.out.println("Fired staff ID " + id);
 			IOHandler.writeSerializedObject(FName, staffList);
 		}
 	}
 
 	public void printAllStaff(){
+		if(staffList.size() == 0){
+			System.out.println("There is no staff");
+		}
 		for (int i = 0; i < staffList.size(); i++) {
 			Staff s = staffList.get(i);
 			System.out.println("Staff ID: " + s.getEmployeeId());
-			System.out.print("Name: " + s.getName());
+			System.out.println("Name: " + s.getName());
 			System.out.println("Gender: " + s.getGender());
 			System.out.println("Job Title : " + s.getJobTitle());
 			System.out.println();

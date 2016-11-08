@@ -7,6 +7,7 @@ public class OrderManager{
 	private PPackageManager packManager = new PPackageManager();
 	private TableManager tManager = new TableManager();
 	private StaffManager sManager = new StaffManager();
+	private ReservationManager rManager = new ReservationManager();
 	private List<Order> orderList;
 	private String FName = "./order.dat";
 	
@@ -22,12 +23,45 @@ public class OrderManager{
         return -1;
     }
 	
-	public void createOrder(int pax, int sId){
+	public void createOrderNoReservation(int pax, int sId){
 		int id;
 		sManager.refresh();
 		Calendar cal = Calendar.getInstance();
 		if(tManager.resIsOpen(cal)){
 			int tableId = tManager.findEmptyTable(pax, cal);
+			int sIndex = sManager.findIndex(sId);
+			if(tableId == -1 && sIndex == -1){
+				System.out.println("Sorry there is no available table and staff with that ID");
+			}
+			else if(tableId == -1){
+				System.out.println("Sorry there is no available table");
+			}
+			else if(sIndex == -1){
+				System.out.println("Sorry there is no staff with that ID");
+			}
+			else{
+				if(orderList.isEmpty()){
+					id = 1;
+				}
+				else{
+					id = orderList.get(orderList.size() - 1).getOrderId() + 1;
+				}
+				Order o = new Order(id, cal, tableId, sId);
+				orderList.add(o);
+				System.out.println("Added entry to orderList");
+				tManager.updateStatus(cal, tableId, 2);
+				IOHandler.writeSerializedObject(FName, orderList);
+			}
+		}
+	}
+
+	public void createOrderReservation(int contactNo, int sId){
+		int id;
+		sManager.refresh();
+		rManager.refresh();
+		Calendar cal = Calendar.getInstance();
+		if(tManager.resIsOpen(cal)){
+			int tableId = rManager.getTableIDByContactNumber(contactNo);
 			int sIndex = sManager.findIndex(sId);
 			if(tableId == -1 && sIndex == -1){
 				System.out.println("Sorry there is no available table and staff with that ID");
@@ -138,6 +172,9 @@ public class OrderManager{
 		int oIndex = findIndex(orderId);
 		List <Integer> alaIdList = orderList.get(oIndex).getAlaCarteIdList();
 		List <Integer> promoIdList = orderList.get(oIndex).getPackageIdList();
+		if(alaIdList.size() == 0 && promoIdList.size() == 0){
+			System.out.println("There is no entry in order ID " + orderId);
+		}
 		for(int i=0; i < alaIdList.size(); i++){
 			String name = alaManager.getAlaCarteById(alaIdList.get(i)).getName();
 			float price = alaManager.getAlaCarteById(alaIdList.get(i)).getPrice();
