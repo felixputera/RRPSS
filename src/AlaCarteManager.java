@@ -88,11 +88,13 @@ public class AlaCarteManager {
     //print format might need to be changed
     public void printSpecificMenu(int id) {
         int i = findIndex(id);
-        AlaCarteMenu x = menu.get(i);
-        System.out.println("ID: " + x.getId());
-        System.out.println("Name: " + x.getName());
-        System.out.println("Price: $" + x.getPrice());
-        System.out.println("Type: " + x.getType());
+        if (i != -1) {
+        	AlaCarteMenu x = menu.get(i);
+            System.out.println("ID: " + x.getId());
+            System.out.println("Name: " + x.getName());
+            System.out.println("Price: $" + x.getPrice());
+            System.out.println("Type: " + x.getType());
+        }
     }
 
     public AlaCarteMenu getAlaCarteById(int id) {

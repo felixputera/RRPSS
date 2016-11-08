@@ -91,14 +91,16 @@ public class PPackageManager {
     //print format might need to be changed
     public void printSpecificPackage(int id) {
         int i = findIndex(id);
-        PromoPackage x = packageList.get(i);
-        System.out.println("ID: " + x.getId());
-        System.out.println("Price: $" + x.getPrice());
-        System.out.println("Contains:");
-        for (int j = 0; j < x.getMenuIdList().size(); j++) {
-            System.out.println("-" + acManage.getAlaCarteById(x.getMenuIdList().get(j)).getName());
+        if (i != -1) {
+        	PromoPackage x = packageList.get(i);
+            System.out.println("ID: " + x.getId());
+            System.out.println("Price: $" + x.getPrice());
+            System.out.println("Contains:");
+            for (int j = 0; j < x.getMenuIdList().size(); j++) {
+                System.out.println("-" + acManage.getAlaCarteById(x.getMenuIdList().get(j)).getName());
+            }
+            System.out.println();
         }
-        System.out.println();
     }
 
     public PromoPackage getPromoById(int id) {

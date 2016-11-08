@@ -72,15 +72,25 @@ public class ReservationManager {
 
     public void checkSpecificReservation(int contactNo) {
         int i = findIndex(contactNo);
-        Reservation r = reserveList.get(i);
-        System.out.println("Date/Time: " + r.getDateTime().getTime());
-        System.out.println("Pax: " + r.getPax());
-        System.out.println("Booking Name: " + r.getBookingName());
-        System.out.println("Contact Number: " + r.getContactNumber());
-        System.out.println("Table ID: " + r.getTableID());
-        System.out.println();
+        if (i != -1) {
+        	Reservation r = reserveList.get(i);
+            System.out.println("Date/Time: " + r.getDateTime().getTime());
+            System.out.println("Pax: " + r.getPax());
+            System.out.println("Booking Name: " + r.getBookingName());
+            System.out.println("Contact Number: " + r.getContactNumber());
+            System.out.println("Table ID: " + r.getTableID());
+            System.out.println();
+        }
     }
 
+    public int getTableIDByContactNumber(int contactNo) {
+        for (Reservation r : reserveList) {
+            if (r.getContactNumber() == contactNo) return r.getTableID();
+        }
+        System.out.println("Contact number not found");
+        return -1;
+    }
+    
     public void refresh() {
         checkExpiry();
         this.reserveList = (ArrayList) IOHandler.readSerializedObject(FName);
