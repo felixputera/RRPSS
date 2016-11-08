@@ -12,42 +12,16 @@ public class UserInterface {
     static Calendar c = Calendar.getInstance();
     static ReservationManager rm = new ReservationManager();
     static SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+    static OrderManager om = new OrderManager();
+    static StaffManager sm = new StaffManager();
     //currently main is just used to test classes, remove if necessary
     public static void main(String[] args) {
-/*
-        System.out.println("Enter the Date ");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
-        Date dat = null;
-        String s = sc.nextLine();
-        try {
-            dat = sdf.parse(s);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        c.setTime(dat);
-        rm.createReservation(c, 9, "bill", 1234567);
-        rm.refresh();
-        rm.checkAllReservation();
-        System.out.println(c.getTime());
+        int choice = 1; // print all menu first
 
-        manage.printAllMenu();
-
-        pmanage.addPackage(19);
-        pmanage.addItemToPackage(3, 2);
-        pmanage.printAllPackage();
-<<<<<<< HEAD
-        
-        OrderManager manager = new OrderManager();
-        manager.createOrder();
-        manager.
-=======
-*/
-        int choice;
-
-        while(true) {
-            System.out.println("1. Create/Update/Remove menu item\n" +
-                    "2. Create/Update/Remove promotion\n" +
+        while(choice!=10) { // Input 10 to exit
+            System.out.println("1. View menu items\n" +
+                    "2. View promotions\n" +
                     "3. Create order\n" +
                     "4. View order\n" +
                     "5. Add/Remove order item/s to/from order\n" +
@@ -55,17 +29,22 @@ public class UserInterface {
                     "7. Check/Remove reservation booking\n" +
                     "8. Check table availability\n" +
                     "9. Print order invoice\n" +
-                    "10. Print sale revenue report by period (eg day or month)");
+                    "10. Exit\n" +
+                    "11. (Admin) Print sale revenue report by period (eg day or month)\n" +
+                    "12. (Admin) Create/Update/Remove menu item\n" +
+                    "13. (Admin) Create/Update/Remove promotion\n" +
+                    "14. (Admin) Hire staff\n" +
+                    "15. (Admin) Fire staff" );
 
             System.out.print("Input: ");
 
             choice = sc.nextInt();
 
             switch (choice){
-                case 1: modifyMenu();
+                case 1: manage.printAllMenu();
                     break;
 
-                case 2: modifyPackage();
+                case 2: pmanage.printAllPackage();
                     break;
 
                 case 3: createOrder();
@@ -86,18 +65,29 @@ public class UserInterface {
                 case 8: checkAvailability();
                     break;
 
-                case 9: manage.printAllMenu(); //printOrderInvoice();
+                case 9: printOrderInvoice();
                     break;
 
-                case 10: pmanage.printAllPackage();//printSaleReport();
+                case 10: System.out.print("EXIT APPLICATION ...");
+
+                case 11: printSaleReport();
                     break;
+
+                case 12: modifyMenu();
+                    break;
+
+                case 13: modifyPackage();
+                    break;
+
+                case 14: break;
+
+                case 15: break;
 
                 default: System.out.println("Please choose another option\n");
                     break;
 
             }
         }
->>>>>>> refs/remotes/origin/min-order-and-ui
     }
 
     public static void modifyMenu(){
@@ -244,15 +234,45 @@ public class UserInterface {
     }
 
     public static void createOrder(){
-        createOrder(5);
+        System.out.println("1. Not reserved yet; 2. Have reserved before");
+        System.out.print("Input: ");
+        int choice = sc.nextInt();
+
+        int pax;
+        int contactNo;
+        int staffId;
+
+        switch(choice){
+            case 1: System.out.print("Number of people: ");
+                pax = sc.nextInt();
+
+                System.out.print("Staff ID: ");
+                staffId = sc.nextInt();
+
+                om.createOrder(pax, staffId);
+                break;
+
+            case 2:
+                break;
+        }
     }
 
     public static void viewOrder(){
-        System.out.println("");
+        System.out.print("View order with ID: ");
+        int oid = sc.nextInt();
+
+        om.viewOrder(oid);
     }
 
     public static void modifyOrder(){
-        System.out.println("");
+        System.out.println("1. Add menu item; 2. Add promotion item; 3. Remove menu item; 4. Remove promotion item");
+        int choice = sc.nextInt();
+
+        switch (choice){
+            case 1: System.out.print("Order ID: ");
+                System.out.print("Menu item ID: ");
+                break;
+        }
     }
 
     public static void createReservation(){
@@ -343,11 +363,14 @@ public class UserInterface {
                         }
 
                         c.setTime(dateTime);
+
+                        rm.refresh();
                         tm.refresh();
                         tm.checkAvailabilityByID(tid, c);
                         break;
 
-                    case 2: tm.refresh();
+                    case 2: rm.refresh();
+                        tm.refresh();
                         tm.checkAvailabilityByID(tid, Calendar.getInstance());
                         break;
                 }
@@ -374,11 +397,14 @@ public class UserInterface {
                         }
 
                         c.setTime(dateTime);
+
+                        rm.refresh();
                         tm.refresh();
                         tm.checkAvailabilityBySize(size, c);
                         break;
 
-                    case 2: tm.refresh();
+                    case 2: rm.refresh();
+                        tm.refresh();
                         tm.checkAvailabilityBySize(size, Calendar.getInstance());
                         break;
                 }
@@ -402,11 +428,14 @@ public class UserInterface {
                         }
 
                         c.setTime(dateTime);
+
+                        rm.refresh();
                         tm.refresh();
                         tm.checkAllTableAvailability(c);
                         break;
 
-                    case 2: tm.refresh();
+                    case 2: rm.refresh();
+                        tm.refresh();
                         tm.checkAllTableAvailability(Calendar.getInstance());
                         break;
                 }
