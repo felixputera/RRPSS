@@ -77,4 +77,16 @@ public class IOHandler {
             System.out.println("Exception >> " + e.getMessage());
         }
     }
+
+    public static void writeStringToTxtFile(String filename, String content){
+        String path = "./" + filename + ".txt";
+        try{
+            PrintWriter fout = new PrintWriter(new BufferedWriter(new FileWriter(path)));
+            fout.println(content);
+            fout.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
