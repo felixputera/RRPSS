@@ -1,25 +1,25 @@
 import java.io.Serializable;
 
 public class AlaCarteMenu implements Serializable {
-    private int id;
+    private int alaCarteId;
     private String name;
     private float price;
     private String type;
     private String desc = "";
 
-    public AlaCarteMenu(int id, String name, float price, String type) {
-        this.id = id;
+    public AlaCarteMenu(int alaCarteId, String name, float price, String type) {
+        this.alaCarteId = alaCarteId;
         this.name = name;
         this.price = price;
         this.type = type;
     }
 
-    public int getId() {
-        return this.id;
+    public int getAlaCarteId() {
+        return this.alaCarteId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAlaCarteId(int alaCarteId) {
+        this.alaCarteId = alaCarteId;
     }
 
     public String getName() {

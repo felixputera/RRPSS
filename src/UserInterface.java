@@ -14,12 +14,13 @@ public class UserInterface {
     static SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
     static OrderManager om = new OrderManager();
     static StaffManager sm = new StaffManager();
+
     //currently main is just used to test classes, remove if necessary
     public static void main(String[] args) {
 
         int choice = 1; // print all menu first
 
-        while(choice!=10) { // Input 10 to exit
+        while (choice != 10) { // Input 10 to exit
             System.out.println("1. View menu items\n" +
                     "2. View promotions\n" +
                     "3. Create order\n" +
@@ -35,68 +36,85 @@ public class UserInterface {
                     "13. (Admin) Create/Update/Remove promotion\n" +
                     "14. (Admin) View all staff\n" +
                     "15. (Admin) Hire staff\n" +
-                    "16. (Admin) Fire staff" );
+                    "16. (Admin) Fire staff");
 
             System.out.print("Input: ");
 
             choice = sc.nextInt();
 
-            switch (choice){
-                case 1: manage.printAllMenu();
+            switch (choice) {
+                case 1:
+                    manage.printAllMenu();
                     break;
 
-                case 2: pmanage.printAllPackage();
+                case 2:
+                    pmanage.printAllPackage();
                     break;
 
-                case 3: createOrder();
+                case 3:
+                    createOrder();
                     break;
 
-                case 4: viewOrder();
+                case 4:
+                    viewOrder();
                     break;
 
-                case 5: modifyOrder();
+                case 5:
+                    modifyOrder();
                     break;
 
-                case 6: createReservation();
+                case 6:
+                    createReservation();
                     break;
 
-                case 7: modifyReservation();
+                case 7:
+                    modifyReservation();
                     break;
 
-                case 8: checkAvailability();
+                case 8:
+                    checkAvailability();
                     break;
 
-                case 9: printOrderInvoice();
+                case 9:
+                    printOrderInvoice();
                     break;
 
-                case 10: System.out.print("EXIT APPLICATION ...");
+                case 10:
+                    System.out.print("EXIT APPLICATION ...");
 
-                case 11: printSaleReport();
+                case 11:
+                    printSaleReport();
                     break;
 
-                case 12: modifyMenu();
+                case 12:
+                    modifyMenu();
                     break;
 
-                case 13: modifyPackage();
+                case 13:
+                    modifyPackage();
                     break;
 
-                case 14: viewAllStaff();
+                case 14:
+                    viewAllStaff();
                     break;
 
-                case 15: hireStaff();
+                case 15:
+                    hireStaff();
                     break;
 
-                case 16: fireStaff();
+                case 16:
+                    fireStaff();
                     break;
 
-                default: System.out.println("Please choose another option\n");
+                default:
+                    System.out.println("Please choose another option\n");
                     break;
 
             }
         }
     }
 
-    public static void modifyMenu(){
+    public static void modifyMenu() {
         System.out.println("1. New menu; 2. Update menu; 3.Remove menu");
         System.out.print("Input: ");
         int choice = sc.nextInt();
@@ -128,7 +146,7 @@ public class UserInterface {
                 System.out.print("Input: ");
                 choice = sc.nextInt();
 
-                switch (choice){
+                switch (choice) {
                     case 1:
                         System.out.print("Menu ID to update: ");
                         id = sc.nextInt();
@@ -180,7 +198,7 @@ public class UserInterface {
         }
     }
 
-    public static void modifyPackage(){
+    public static void modifyPackage() {
         System.out.println("1. New promotion; 2. Update promotion; 3.Remove promotion");
         System.out.print("Input: ");
         int choice = sc.nextInt();
@@ -202,8 +220,9 @@ public class UserInterface {
                 System.out.print("Input: ");
                 choice = sc.nextInt();
 
-                switch (choice){
-                    case 1: System.out.print("Package ID: ");
+                switch (choice) {
+                    case 1:
+                        System.out.print("Package ID: ");
                         pid = sc.nextInt();
 
                         System.out.print("Menu ID to add to package: ");
@@ -212,7 +231,8 @@ public class UserInterface {
                         pmanage.addItemToPackage(pid, mid);
                         break;
 
-                    case 2: System.out.print("Package ID: ");
+                    case 2:
+                        System.out.print("Package ID: ");
                         pid = sc.nextInt();
 
                         System.out.print("New package price: ");
@@ -221,7 +241,8 @@ public class UserInterface {
                         pmanage.updatePrice(pid, price);
                         break;
 
-                    case 3: System.out.print("Package ID: ");
+                    case 3:
+                        System.out.print("Package ID: ");
                         pid = sc.nextInt();
 
                         System.out.print("Menu ID to remove from package");
@@ -239,7 +260,7 @@ public class UserInterface {
         }
     }
 
-    public static void createOrder(){
+    public static void createOrder() {
         System.out.println("1. Not reserved yet; 2. Have reserved before");
         System.out.print("Input: ");
         int choice = sc.nextInt();
@@ -248,8 +269,9 @@ public class UserInterface {
         int contactNo;
         int staffId;
 
-        switch(choice){
-            case 1: System.out.print("Number of people: ");
+        switch (choice) {
+            case 1:
+                System.out.print("Number of people: ");
                 pax = sc.nextInt();
 
                 System.out.print("Staff ID: ");
@@ -259,7 +281,8 @@ public class UserInterface {
                 om.refresh();
                 break;
 
-            case 2: System.out.print("Contact Number: ");
+            case 2:
+                System.out.print("Contact Number: ");
                 contactNo = sc.nextInt();
 
                 System.out.print("Staff ID: ");
@@ -270,7 +293,7 @@ public class UserInterface {
         }
     }
 
-    public static void viewOrder(){
+    public static void viewOrder() {
         System.out.print("View order with ID: ");
         int oid = sc.nextInt();
 
@@ -278,7 +301,7 @@ public class UserInterface {
         om.viewOrder(oid);
     }
 
-    public static void modifyOrder(){
+    public static void modifyOrder() {
         System.out.print("Order ID to modify: ");
         int oid = sc.nextInt();
 
@@ -290,37 +313,42 @@ public class UserInterface {
         int menuId;
         int pid;
 
-        while(choice!=5) {
+        while (choice != 5) {
             switch (choice) {
-                case 1: System.out.print("Menu item ID to add: ");
+                case 1:
+                    System.out.print("Menu item ID to add: ");
                     menuId = sc.nextInt();
 
                     om.addItemToOrderAlaCarte(menuId, oid);
                     om.refresh();
                     break;
 
-                case 2: System.out.print("Menu item ID to remove: ");
+                case 2:
+                    System.out.print("Menu item ID to remove: ");
                     menuId = sc.nextInt();
 
                     om.removeItemFromOrderAlaCarte(menuId, oid);
                     om.refresh();
                     break;
 
-                case 3: System.out.print("Package ID to add: ");
+                case 3:
+                    System.out.print("Package ID to add: ");
                     pid = sc.nextInt();
 
                     om.addItemToOrderPromo(pid, oid);
                     om.refresh();
                     break;
 
-                case 4: System.out.print("Package ID to remove: ");
+                case 4:
+                    System.out.print("Package ID to remove: ");
                     pid = sc.nextInt();
 
                     om.removeItemFromOrderPromo(pid, oid);
                     om.refresh();
                     break;
 
-                default: System.out.print("Choose another option.");
+                default:
+                    System.out.print("Choose another option.");
                     break;
             }
 
@@ -331,7 +359,7 @@ public class UserInterface {
         }
     }
 
-    public static void createReservation(){
+    public static void createReservation() {
         System.out.print("Date & Time to reserve (MM-dd-yyyy HH:mm): ");
         sc.nextLine(); //clear buffer
         String dateString = sc.nextLine();
@@ -339,8 +367,7 @@ public class UserInterface {
 
         try {
             dateTime = sdf.parse(dateString);
-        }
-        catch (ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -360,26 +387,29 @@ public class UserInterface {
         rm.refresh();
     }
 
-    public static void modifyReservation(){
+    public static void modifyReservation() {
         System.out.println("1. Check specific reservation; 2. Check all reservation; 3. Remove reservation");
         System.out.print("Input: ");
         int choice = sc.nextInt();
 
         int contactNo;
 
-        switch(choice){
-            case 1: System.out.print("Check reservation with contact number: ");
+        switch (choice) {
+            case 1:
+                System.out.print("Check reservation with contact number: ");
                 contactNo = sc.nextInt();
 
                 rm.refresh();
                 rm.checkSpecificReservation(contactNo);
                 break;
 
-            case 2: rm.refresh();
+            case 2:
+                rm.refresh();
                 rm.checkAllReservation();
                 break;
 
-            case 3: System.out.print("Remove reservation with contact number: ");
+            case 3:
+                System.out.print("Remove reservation with contact number: ");
                 contactNo = sc.nextInt();
 
                 rm.removeReservation(contactNo);
@@ -388,7 +418,7 @@ public class UserInterface {
         }
     }
 
-    public static void checkAvailability(){
+    public static void checkAvailability() {
         System.out.println("1. Check by ID; 2. Check by size; 3. Check all tables");
         System.out.print("Input: ");
         int choice = sc.nextInt();
@@ -398,23 +428,24 @@ public class UserInterface {
         Date dateTime = null;
         String dateString;
 
-        switch (choice){
-            case 1: System.out.print("Table ID: ");
+        switch (choice) {
+            case 1:
+                System.out.print("Table ID: ");
                 tid = sc.nextInt();
 
                 System.out.print("1. Insert Date & Time ; 2. Use current time");
                 choice = sc.nextInt();
 
-                switch(choice){
-                    case 1: System.out.println("Date & Time (MM-dd-yyyy HH:mm): ");
+                switch (choice) {
+                    case 1:
+                        System.out.println("Date & Time (MM-dd-yyyy HH:mm): ");
                         System.out.print("Input: ");
                         sc.nextLine(); //clear buffer
                         dateString = sc.nextLine();
 
                         try {
                             dateTime = sdf.parse(dateString);
-                        }
-                        catch (ParseException e){
+                        } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
@@ -425,7 +456,8 @@ public class UserInterface {
                         tm.checkAvailabilityByID(tid, c);
                         break;
 
-                    case 2: rm.refresh();
+                    case 2:
+                        rm.refresh();
                         tm.refresh();
                         tm.checkAvailabilityByID(tid, Calendar.getInstance());
                         break;
@@ -433,22 +465,23 @@ public class UserInterface {
 
                 break;
 
-            case 2: System.out.print("Table size: ");
+            case 2:
+                System.out.print("Table size: ");
                 size = sc.nextInt();
 
                 System.out.print("1. Insert Date & Time ; 2. Use current time");
                 choice = sc.nextInt();
 
-                switch(choice){
-                    case 1: System.out.println("Date & Time (MM-dd-yyyy HH:mm): ");
+                switch (choice) {
+                    case 1:
+                        System.out.println("Date & Time (MM-dd-yyyy HH:mm): ");
                         System.out.print("Input: ");
                         sc.nextLine(); //clear buffer
                         dateString = sc.nextLine();
 
                         try {
                             dateTime = sdf.parse(dateString);
-                        }
-                        catch (ParseException e){
+                        } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
@@ -459,7 +492,8 @@ public class UserInterface {
                         tm.checkAvailabilityBySize(size, c);
                         break;
 
-                    case 2: rm.refresh();
+                    case 2:
+                        rm.refresh();
                         tm.refresh();
                         tm.checkAvailabilityBySize(size, Calendar.getInstance());
                         break;
@@ -467,19 +501,20 @@ public class UserInterface {
 
                 break;
 
-            case 3: System.out.println("1. Insert Date & Time ; 2. Use current time");
+            case 3:
+                System.out.println("1. Insert Date & Time ; 2. Use current time");
                 System.out.print("Input: ");
                 choice = sc.nextInt();
 
-                switch(choice){
-                    case 1: System.out.print("Date & Time (MM-dd-yyyy HH:mm): ");
+                switch (choice) {
+                    case 1:
+                        System.out.print("Date & Time (MM-dd-yyyy HH:mm): ");
                         sc.nextLine(); //clear buffer
                         dateString = sc.nextLine();
 
                         try {
                             dateTime = sdf.parse(dateString);
-                        }
-                        catch (ParseException e){
+                        } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
@@ -490,7 +525,8 @@ public class UserInterface {
                         tm.checkAllTableAvailability(c);
                         break;
 
-                    case 2: rm.refresh();
+                    case 2:
+                        rm.refresh();
                         tm.refresh();
                         tm.checkAllTableAvailability(Calendar.getInstance());
                         break;
@@ -500,7 +536,7 @@ public class UserInterface {
         }
     }
 
-    public static void printOrderInvoice(){
+    public static void printOrderInvoice() {
         System.out.print("Please Enter Order ID: ");
         int oid = sc.nextInt();
 
@@ -508,7 +544,7 @@ public class UserInterface {
         om.printInvoice(oid);
     }
 
-    public static void printSaleReport(){
+    public static void printSaleReport() {
         System.out.println("Print Sales Report in 1. Month; 2. Period");
         System.out.print("Input: ");
         int choice = sc.nextInt();
@@ -517,15 +553,17 @@ public class UserInterface {
         int month;
         int day;
 
-        switch(choice){
-            case 1: System.out.print("Month (0 to 11): ");
+        switch (choice) {
+            case 1:
+                System.out.print("Month (0 to 11): ");
                 month = sc.nextInt();
 
                 om.refresh();
                 om.salesRevenueReport(month);
                 break;
 
-            case 2: System.out.print("Year Month Day: ");
+            case 2:
+                System.out.print("Year Month Day: ");
                 year = sc.nextInt();
                 month = sc.nextInt();
                 day = sc.nextInt();
@@ -536,12 +574,12 @@ public class UserInterface {
         }
     }
 
-    public static void viewAllStaff(){
+    public static void viewAllStaff() {
         sm.refresh();
         sm.printAllStaff();
     }
 
-    public static void hireStaff(){
+    public static void hireStaff() {
         System.out.print("Name of new staff: ");
         sc.nextLine(); // clear buffer
         String name = sc.nextLine();
@@ -557,7 +595,7 @@ public class UserInterface {
         sm.refresh();
     }
 
-    public static void fireStaff(){
+    public static void fireStaff() {
         System.out.print("Staff ID fired: ");
         sc.nextLine(); // clear buffer
         int id = sc.nextInt();

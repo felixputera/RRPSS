@@ -20,9 +20,9 @@ public class ReservationManager {
         return -1;
     }
 
-    private boolean noSameContact(int contactNo){
-        for (Reservation r : reserveList){
-            if (r.getContactNumber() == contactNo){
+    private boolean noSameContact(int contactNo) {
+        for (Reservation r : reserveList) {
+            if (r.getContactNumber() == contactNo) {
                 return false;
             }
         }
@@ -73,7 +73,7 @@ public class ReservationManager {
     public void checkSpecificReservation(int contactNo) {
         int i = findIndex(contactNo);
         if (i != -1) {
-        	Reservation r = reserveList.get(i);
+            Reservation r = reserveList.get(i);
             System.out.println("Date/Time: " + r.getDateTime().getTime());
             System.out.println("Pax: " + r.getPax());
             System.out.println("Booking Name: " + r.getBookingName());
@@ -90,7 +90,7 @@ public class ReservationManager {
         System.out.println("Contact number not found");
         return -1;
     }
-    
+
     public void refresh() {
         checkExpiry();
         this.reserveList = (ArrayList) IOHandler.readSerializedObject(FName);
@@ -111,7 +111,7 @@ public class ReservationManager {
             }
         }
 
-        for (Reservation d : deleteList){
+        for (Reservation d : deleteList) {
             removeReservation(d.getContactNumber());
         }
     }

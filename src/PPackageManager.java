@@ -13,7 +13,7 @@ public class PPackageManager {
 
     public int findIndex(int id) {
         for (int i = 0; i < packageList.size(); i++) {
-            if (packageList.get(i).getId() == id) return i;
+            if (packageList.get(i).getPromoId() == id) return i;
         }
         System.out.println("Package ID not found");
         return -1;
@@ -23,7 +23,7 @@ public class PPackageManager {
         int id;
         if (packageList.isEmpty()) id = 1;
         else {
-            id = packageList.get(packageList.size() - 1).getId() + 1;
+            id = packageList.get(packageList.size() - 1).getPromoId() + 1;
         }
         PromoPackage p = new PromoPackage(id, price);
         this.packageList.add(p);
@@ -78,7 +78,7 @@ public class PPackageManager {
     public void printAllPackage() {
         for (int i = 0; i < packageList.size(); i++) {
             PromoPackage x = packageList.get(i);
-            System.out.println("ID: " + x.getId());
+            System.out.println("ID: " + x.getPromoId());
             System.out.println("Price: $" + x.getPrice());
             System.out.println("Contains:");
             for (int j = 0; j < x.getMenuIdList().size(); j++) {
@@ -92,8 +92,8 @@ public class PPackageManager {
     public void printSpecificPackage(int id) {
         int i = findIndex(id);
         if (i != -1) {
-        	PromoPackage x = packageList.get(i);
-            System.out.println("ID: " + x.getId());
+            PromoPackage x = packageList.get(i);
+            System.out.println("ID: " + x.getPromoId());
             System.out.println("Price: $" + x.getPrice());
             System.out.println("Contains:");
             for (int j = 0; j < x.getMenuIdList().size(); j++) {
@@ -105,10 +105,14 @@ public class PPackageManager {
 
     public PromoPackage getPromoById(int id) {
         for (PromoPackage p : packageList) {
-            if (p.getId() == id) return p;
+            if (p.getPromoId() == id) return p;
         }
         System.out.println("Promotional Package ID not found");
         return null;
+    }
+
+    public int menuSize() {
+        return packageList.size();
     }
 
     public void refresh() {

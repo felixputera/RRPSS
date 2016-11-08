@@ -11,7 +11,7 @@ public class AlaCarteManager {
 
     public int findIndex(int id) {
         for (int i = 0; i < menu.size(); i++) {
-            if (menu.get(i).getId() == id) return i;
+            if (menu.get(i).getAlaCarteId() == id) return i;
         }
         System.out.println("ID not found");
         return -1;
@@ -21,7 +21,7 @@ public class AlaCarteManager {
         int id;
         if (menu.isEmpty()) id = 1;
         else {
-            id = menu.get(menu.size() - 1).getId() + 1;
+            id = menu.get(menu.size() - 1).getAlaCarteId() + 1;
         }
         AlaCarteMenu m = new AlaCarteMenu(id, name, price, type);
         this.menu.add(m);
@@ -77,7 +77,7 @@ public class AlaCarteManager {
     public void printAllMenu() {
         for (int i = 0; i < menu.size(); i++) {
             AlaCarteMenu x = menu.get(i);
-            System.out.println("ID: " + x.getId());
+            System.out.println("ID: " + x.getAlaCarteId());
             System.out.println("Name: " + x.getName());
             System.out.println("Price: $" + x.getPrice());
             System.out.println("Type: " + x.getType());
@@ -89,8 +89,8 @@ public class AlaCarteManager {
     public void printSpecificMenu(int id) {
         int i = findIndex(id);
         if (i != -1) {
-        	AlaCarteMenu x = menu.get(i);
-            System.out.println("ID: " + x.getId());
+            AlaCarteMenu x = menu.get(i);
+            System.out.println("ID: " + x.getAlaCarteId());
             System.out.println("Name: " + x.getName());
             System.out.println("Price: $" + x.getPrice());
             System.out.println("Type: " + x.getType());
@@ -99,10 +99,14 @@ public class AlaCarteManager {
 
     public AlaCarteMenu getAlaCarteById(int id) {
         for (AlaCarteMenu m : menu) {
-            if (m.getId() == id) return m;
+            if (m.getAlaCarteId() == id) return m;
         }
         System.out.println("AlaCarte menu ID not found");
         return null;
+    }
+
+    public int menuSize() {
+        return menu.size();
     }
 
     public void refresh() {

@@ -49,14 +49,13 @@ public class IOHandler {
         }
     }
 
-    public static void writeStringToTxtFile(String filename, String content){
+    public static void writeStringToTxtFile(String filename, String content) {
         String path = "./" + filename + ".txt";
-        try{
+        try {
             PrintWriter fout = new PrintWriter(new BufferedWriter(new FileWriter(path)));
             fout.println(content);
             fout.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

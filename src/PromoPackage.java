@@ -3,21 +3,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PromoPackage implements Serializable {
-    private int id;
+    private int promoId;
     private float price;
     private List<Integer> menuIdList = new ArrayList<Integer>();
 
-    public PromoPackage(int id, float price) {
-        this.id = id;
+    public PromoPackage(int promoId, float price) {
+        this.promoId = promoId;
         this.price = price;
     }
 
-    public int getId() {
-        return id;
+    public int getPromoId() {
+        return promoId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPromoId(int promoId) {
+        this.promoId = promoId;
     }
 
     public float getPrice() {
