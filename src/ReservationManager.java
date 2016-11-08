@@ -20,12 +20,21 @@ public class ReservationManager {
         return -1;
     }
 
+    private boolean noSameContact(int contactNo){
+        for (Reservation r : reserveList){
+            if (r.getContactNumber() == contactNo){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void createReservation(Calendar dateTime, int pax, String name, int contactNo) {
         tableManage.refresh();
         int emptyID = tableManage.findEmptyTable(pax, dateTime);
         if (emptyID != -1 && ((dateTime.get(Calendar.HOUR_OF_DAY) >= 11 && dateTime.get(Calendar.HOUR_OF_DAY) <= 14) ||
                 (dateTime.get(Calendar.HOUR_OF_DAY) >= 18 && dateTime.get(Calendar.HOUR_OF_DAY) <= 21)) &&
-                (dateTime.getTime().getTime() / 1000 - Calendar.getInstance().getTime().getTime() / 1000) > 0 &&
+                dateTime.getTime().after(Calendar.getInstance().getTime()) && noSameContact(contactNo) &&
                 (dateTime.getTime().getTime() / 1000 - Calendar.getInstance().getTime().getTime() / 1000) < 30 * 24 * 60 * 60) {
             Reservation r = new Reservation(dateTime, pax, name, contactNo, emptyID);
             this.reserveList.add(r);
@@ -80,6 +89,7 @@ public class ReservationManager {
     public void checkExpiry() {
         Calendar now = Calendar.getInstance();
         Iterator<Reservation> iter = reserveList.iterator();
+        List<Reservation> deleteList = new ArrayList<>();
 
         while (iter.hasNext()) {
             Reservation r = iter.next();
@@ -87,8 +97,12 @@ public class ReservationManager {
             if ((r.getDateTime().getTime().getTime() / 1000 - now.getTime().getTime() / 1000) < -1800) {
                 System.out.println("Reservation w/ contact number " + r.getContactNumber() +
                         " has been canceled (30 mins passed)");
-                removeReservation(r.getContactNumber());
+                deleteList.add(r);
             }
+        }
+
+        for (Reservation d : deleteList){
+            removeReservation(d.getContactNumber());
         }
     }
 }
