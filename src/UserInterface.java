@@ -12,8 +12,8 @@ public class UserInterface {
     static Calendar c = Calendar.getInstance();
     static ReservationManager rm = new ReservationManager();
     static SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
-    static OrderManager om = new OrderManager();
-    static StaffManager sm = new StaffManager();
+    //static OrderManager om = new OrderManager();
+    //static StaffManager sm = new StaffManager();
     //currently main is just used to test classes, remove if necessary
     public static void main(String[] args) {
 
@@ -234,7 +234,7 @@ public class UserInterface {
     }
 
     public static void createOrder(){
-        System.out.println("1. Not reserved yet; 2. Have reserved before");
+        /*System.out.println("1. Not reserved yet; 2. Have reserved before");
         System.out.print("Input: ");
         int choice = sc.nextInt();
 
@@ -254,18 +254,18 @@ public class UserInterface {
 
             case 2:
                 break;
-        }
+        }*/
     }
 
     public static void viewOrder(){
-        System.out.print("View order with ID: ");
+       /* System.out.print("View order with ID: ");
         int oid = sc.nextInt();
 
-        om.viewOrder(oid);
+        om.viewOrder(oid);*/
     }
 
     public static void modifyOrder(){
-        System.out.println("1. Add menu item; 2. Add promotion item; 3. Remove menu item; 4. Remove promotion item");
+      /*  System.out.println("1. Add menu item; 2. Add promotion item; 3. Remove menu item; 4. Remove promotion item");
         int choice = sc.nextInt();
 
         int oid;
@@ -299,7 +299,7 @@ public class UserInterface {
 
                 om.addItemToOrderAlaCarte(menuId, oid);
                 break;
-        }
+        }*/
     }
 
     public static void createReservation(){
