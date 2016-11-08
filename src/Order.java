@@ -33,7 +33,7 @@ public class Order implements Serializable {
 	}
 	
 	public void setDateTime(Calendar reserve){
-		dateTime = reserve;
+		this.dateTime = reserve;
 	}
 	
 	public int getTableId(){
@@ -41,7 +41,7 @@ public class Order implements Serializable {
 	}
 	
 	public void setTableId(int tId){
-		tableId = tId;
+		this.tableId = tId;
 	}
 	
 	public int getStaffId(){
@@ -49,35 +49,35 @@ public class Order implements Serializable {
 	}
 	
 	public void setStaffId(int sId){
-		staffId = sId;
+		this.staffId = sId;
 	}
 	
 	public List<Integer> getAlaCarteIdList(){
-		return alaCarteIdList;
+		return this.alaCarteIdList;
 	}
 	
 	public List<Integer> getPackageIdList(){
-		return packageIdList;
+		return this.packageIdList;
 	}
 	
 	public int getAmountAlaCarteId(int alaId){
-		return amountAlaCarteId[alaId];
+		return this.amountAlaCarteId[alaId];
 	}
 	
 	public int getAmountPackageId(int packId){
-		return amountPackagedId[packId];
+		return this.amountPackageId[packId];
 	}
 	
 	public void addItemToAlaCarte(int alaCarteId){
 		if(amountAlaCarteId[alaCarteId] == 0){
-			alaCarteIdList.add(alaCarteId);
+			this.alaCarteIdList.add(alaCarteId);
 		}
 		amountAlaCarteId[alaCarteId] = amountAlaCarteId[alaCarteId] + 1;
 	}
 	
 	public void addItemToPromo(int promoId){
 		if(amountPackageId[promoId] == 0){
-			packageIdList.add(promoId);
+			this.packageIdList.add(promoId);
 		}
 		amountPackageId[promoId] = amountPackageId[promoId] + 1;
 	}

@@ -18,24 +18,24 @@ public class OrderManager{
         for (int i = 0; i < orderList.size(); i++) {
             if (orderList.get(i).getorderId() == id) return i;
         }
-        System.out.println("ID not found");
+        System.out.println("Order ID not found");
         return -1;
     }
 	
 	public void createOrder(int pax, int sId){
+		int id;
 		Calendar cal = Calendar.getInstance();
 		if(tManager.resIsOpen(cal)){
 			int tableId = tManager.findEmptyTable(pax, cal);
-			int id;
 			int sIndex = sManager.findIndex(sId);
 			if(tableId == -1 && sIndex == -1){
-				System.out.println("Sorry there is no available table and staff");
+				System.out.println("Sorry there is no available table and staff with that ID");
 			}
 			else if(tableId == -1){
-				System.out.println("Sorry there is no availabel table");
+				System.out.println("Sorry there is no available table");
 			}
 			else if(sIndex == -1){
-				System.out.println("Sorry there is no such staff");
+				System.out.println("Sorry there is no staff with that ID");
 			}
 			else{
 				if(orderList.isEmpty()){
@@ -62,23 +62,23 @@ public class OrderManager{
 		}
 	}
 	
-	public void addItemToOrderAlaCarte(int alaCarteID, int orderId){
+	public void addItemToOrderAlaCarte(int alaCarteId, int orderId){
 		alaManager.refresh();
 		int oIndex = findIndex(orderId);
-        int aIndex = alaManager.findIndex(alaCarteID);
+        int aIndex = alaManager.findIndex(alaCarteId);
         if (oIndex != -1 && aIndex != -1){
-    		orderList.get(oIndex).addItemToAlaCarte(alaCarteID);
+    		orderList.get(oIndex).addItemToAlaCarte(alaCarteId);
         	System.out.println("Added Ala Carte Item to Order");
         	IOHandler.writeSerializedObject(FName, orderList);
         }
 	}
-	public void addItemToOrderPromo(int packID, int orderId){
+	public void addItemToOrderPromo(int packId, int orderId){
 		packManager.refresh();
 		int oIndex = findIndex(orderId);
-        int pIndex = packManager.findIndex(packID);
+        int pIndex = packManager.findIndex(packId);
         if (oIndex != -1 && pIndex != -1){
-        	orderList.get(oIndex).addItemToPromo(packID);
-        	System.out.println("Added Promotional Package Item to Order ");
+        	orderList.get(oIndex).addItemToPromo(packId);
+        	System.out.println("Added Promotional Package Item to Order");
         	IOHandler.writeSerializedObject(FName, orderList);
         }
 	}
@@ -86,10 +86,10 @@ public class OrderManager{
 	public void removeItemFromOrderAlaCarte(int orderId, int alaCarteId){
 		alaManager.refresh();
 		int oIndex = findIndex(orderId);
-		int aIndex = alaManager.findIndex(alaCarteID);
+		int aIndex = alaManager.findIndex(alaCarteId);
 		if(oIndex != -1 && aIndex != -1){
 			if(orderList.get(oIndex).getAlaCarteIdList().contains(alaCarteId)){
-				orderList.get(oIndex).removeItemFromAlaCarte(alaCarteID);
+				orderList.get(oIndex).removeItemFromAlaCarte(alaCarteId);
 				System.out.println("Ala Carte item deleted from order");
 				IOHandler.writeSerializedObject(FName, orderList);
 			}
