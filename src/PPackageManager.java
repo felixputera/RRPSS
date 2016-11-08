@@ -81,10 +81,8 @@ public class PPackageManager {
             System.out.println("ID: " + x.getId());
             System.out.println("Price: $" + x.getPrice());
             System.out.println("Contains:");
-            if (!x.getMenuIdList().isEmpty()) {
-                for (int j = 0; j < x.getMenuIdList().size(); j++) {
-                    System.out.println("-" + acManage.getAlaCarteById(x.getMenuIdList().get(j)).getName());
-                }
+            for (int j = 0; j < x.getMenuIdList().size(); j++) {
+                System.out.println("-" + acManage.getAlaCarteById(x.getMenuIdList().get(j)).getName());
             }
             System.out.println();
         }

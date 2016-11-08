@@ -1,16 +1,17 @@
 import java.util.*;
 public class Order {
 	private int OrderID;
+	private int TableID;
 	private Calendar DateTime;
 	private List<Integer> AlaCarteIDList = new ArrayList<Integer>();
 	private List<Integer> PackageIDList = new ArrayList<Integer>();
 	
 	
-	public Order(int ID, Calendar reserve){
+	public Order(int ID, Calendar reserve, int tID){
 		OrderID = ID;
 		DateTime = reserve;
+		TableID = tID;
 	}
-	
 	
 	public int getOrderID(){
 		return OrderID;
@@ -24,6 +25,9 @@ public class Order {
 	public List<Integer> getPackageIDList(){
 		return PackageIDList;
 	}
+	public int getTableID(){
+		return TableID;
+	}
 	
 	
 	public void setOrderID(int ID){
@@ -31,6 +35,9 @@ public class Order {
 	}
 	public void setDateTime(Calendar reserve){
 		DateTime = reserve;
+	}
+	public void setTableID(int tID){
+		TableID = tID;
 	}
 	
 	

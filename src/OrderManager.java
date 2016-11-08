@@ -6,6 +6,7 @@ import java.util.List;
 public class OrderManager{
 	AlaCarteManager AlaManager = new AlaCarteManager();
 	PPackageManager PackManager = new PPackageManager();
+	TableManager TManager = new TableManager();
 	private List<Order> OrderList;
 	private String FName = "./menu.dat";
 	
@@ -14,8 +15,18 @@ public class OrderManager{
 	}
 	
 	public void printInvoice(int OrderID){
-		printOrder(OrderID);
-		System.out.println(CalculateTotal(OrderID));
+		int oIndex = findIndex(OrderID);
+		double total;
+		System.out.println("	Delicious Food Restaurant	");
+		System.out.println("		12 Newton Street		");
+		System.out.println("		   Singapore			");
+		System.out.println("		Tel: 123-456-7000		");
+		System.out.println("			Order ID:" + OrderID);
+		this.viewOrder(OrderID);
+		total = CalculateTotal(OrderID);
+		System.out.println("Subtotal.....		" + total);
+		System.out.println("10% Service Charge	" + 0.1 * total);
+		System.out.println("7%GST				" + 0.07 * total);
 	}
 	
 	public int findIndex(int id) {
@@ -26,10 +37,25 @@ public class OrderManager{
         return -1;
     }
 	
-	public void createOrder(){
-		OrderList.add(new Order(OrderList.size(), Calendar.getInstance()));
-		System.out.println("Added entry to orderList");
-		IOHandler.writeSerializedObject(FName, OrderList);
+	public void createOrder(int pax){
+		Calendar cal = Calendar.getInstance();
+		int tableID = TManager.findEmptyTable(pax, cal);
+		int id;
+		if(tableID == -1){
+			System.out.println("Sorry there is no available table");
+		}
+		else{
+			if(OrderList.isEmpty()){
+				id = 1;
+			}
+			else{
+				id = OrderList.get(OrderList.size() - 1).getOrderID() + 1;
+			}
+			Order o = new Order(id, cal, tableID);
+			OrderList.add(o);
+			System.out.println("Added entry to orderList");
+			IOHandler.writeSerializedObject(FName, OrderList);
+		}
 	}
 	
 	public void addItemToOrderAlaCarte(int alaCarteID, int OrderID){
@@ -66,6 +92,7 @@ public class OrderManager{
 		}
 	}
 	
+	
 	public float CalculateTotal(int OrderID){
 		float total = 0;
 		int oIndex = findIndex(OrderID);
@@ -79,7 +106,7 @@ public class OrderManager{
 		return total;
 	}
 	
-	public void printOrder(int OrderID){
+	public void viewOrder(int OrderID){
 		int oIndex = findIndex(OrderID);
 		List <Integer> AlaIDList = OrderList.get(oIndex).getAlaCarteIDList();
 		for(int i=0; i < AlaIDList.size(); i++){
