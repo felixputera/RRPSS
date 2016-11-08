@@ -268,9 +268,36 @@ public class UserInterface {
         System.out.println("1. Add menu item; 2. Add promotion item; 3. Remove menu item; 4. Remove promotion item");
         int choice = sc.nextInt();
 
+        int oid;
+        int menuId;
+        int pid;
+
         switch (choice){
             case 1: System.out.print("Order ID: ");
+                oid = sc.nextInt();
+
+                System.out.print("Menu item ID to add: ");
+                menuId = sc.nextInt();
+
+                om.addItemToOrderAlaCarte(menuId, oid);
+                break;
+
+            case 2: System.out.print("Order ID: ");
+                oid = sc.nextInt();
+
+                System.out.print("Menu item ID to remove: ");
+                menuId = sc.nextInt();
+
+                om.removeItemFromOrderAlaCarte(menuId, oid);
+                break;
+
+            case 3: System.out.print("Order ID: ");
+                oid = sc.nextInt();
+
                 System.out.print("Menu item ID: ");
+                menuId = sc.nextInt();
+
+                om.addItemToOrderAlaCarte(menuId, oid);
                 break;
         }
     }
