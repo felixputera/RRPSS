@@ -1,136 +1,238 @@
-import java.util.ArrayList;
+1import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class OrderManager{
-	AlaCarteManager AlaManager = new AlaCarteManager();
-	PPackageManager PackManager = new PPackageManager();
-	TableManager TManager = new TableManager();
-	private List<Order> OrderList;
-	private String FName = "./menu.dat";
+	private AlaCarteManager alaManager = new AlaCarteManager();
+	private PPackageManager packManager = new PPackageManager();
+	private TableManager tManager = new TableManager();
+	private StaffManager sManager = new StaffManager();
+	private List<Order> orderList;
+	private String FName = "./order.dat";
 	
 	public OrderManager(){
-		this.OrderList = (ArrayList) IOHandler.readSerializedObject(FName);
-	}
-	
-	public void printInvoice(int OrderID){
-		int oIndex = findIndex(OrderID);
-		double total;
-		System.out.println("	Delicious Food Restaurant	");
-		System.out.println("		12 Newton Street		");
-		System.out.println("		   Singapore			");
-		System.out.println("		Tel: 123-456-7000		");
-		System.out.println("			Order ID:" + OrderID);
-		this.viewOrder(OrderID);
-		total = CalculateTotal(OrderID);
-		System.out.println("Subtotal.....		" + total);
-		System.out.println("10% Service Charge	" + 0.1 * total);
-		System.out.println("7%GST				" + 0.07 * total);
+		this.orderList = (ArrayList) IOHandler.readSerializedObject(FName);
 	}
 	
 	public int findIndex(int id) {
-        for (int i = 0; i < OrderList.size(); i++) {
-            if (OrderList.get(i).getOrderID() == id) return i;
+        for (int i = 0; i < orderList.size(); i++) {
+            if (orderList.get(i).getorderId() == id) return i;
         }
         System.out.println("ID not found");
         return -1;
     }
 	
-	public void createOrder(int pax){
+	public void createOrder(int pax, int sId){
 		Calendar cal = Calendar.getInstance();
-		int tableID = TManager.findEmptyTable(pax, cal);
-		int id;
-		if(tableID == -1){
-			System.out.println("Sorry there is no available table");
-		}
-		else{
-			if(OrderList.isEmpty()){
-				id = 1;
+		if(tManager.resIsOpen(cal)){
+			int tableId = tManager.findEmptyTable(pax, cal);
+			int id;
+			int sIndex = sManager.findIndex(sId);
+			if(tableId == -1 && sIndex == -1){
+				System.out.println("Sorry there is no available table and staff");
+			}
+			else if(tableId == -1){
+				System.out.println("Sorry there is no availabel table");
+			}
+			else if(sIndex == -1){
+				System.out.println("Sorry there is no such staff");
 			}
 			else{
-				id = OrderList.get(OrderList.size() - 1).getOrderID() + 1;
+				if(orderList.isEmpty()){
+					id = 1;
+				}
+				else{
+					id = orderList.get(orderList.size() - 1).getorderId() + 1;
+				}
+				Order o = new Order(id, cal, tableId, sId);
+				orderList.add(o);
+				System.out.println("Added entry to orderList");
+				tManager.updateStatus(cal, tableId, 2);
+				IOHandler.writeSerializedObject(FName, orderList);
 			}
-			Order o = new Order(id, cal, tableID);
-			OrderList.add(o);
-			System.out.println("Added entry to orderList");
-			IOHandler.writeSerializedObject(FName, OrderList);
 		}
 	}
 	
-	public void addItemToOrderAlaCarte(int alaCarteID, int OrderID){
-		int oIndex = findIndex(OrderID);
-        int aIndex = AlaManager.findIndex(alaCarteID);
-        if (oIndex != -1 && aIndex != -1){
-        	OrderList.get(oIndex).addItemToAlaCarte(alaCarteID);
-        	System.out.println("Added Item to Order");
-        }
-		OrderList.get(OrderID).addItemToAlaCarte(alaCarteID);
-		System.out.println("Added item to Order " + OrderID);
+	public void removeOrder(int id){
+		int i = findIndex(id);
+		if(i != -1){
+			orderList.remove(i);
+			System.out.println("Order removed");
+			IOHandler.writeSerializedObject(FName, orderList);
+		}
 	}
-	public void addItemToOrderPromo(int packID, int OrderID){
-		int oIndex = findIndex(OrderID);
-        int pIndex = PackManager.findIndex(packID);
+	
+	public void addItemToOrderAlaCarte(int alaCarteID, int orderId){
+		alaManager.refresh();
+		int oIndex = findIndex(orderId);
+        int aIndex = alaManager.findIndex(alaCarteID);
+        if (oIndex != -1 && aIndex != -1){
+    		orderList.get(oIndex).addItemToAlaCarte(alaCarteID);
+        	System.out.println("Added Ala Carte Item to Order");
+        	IOHandler.writeSerializedObject(FName, orderList);
+        }
+	}
+	public void addItemToOrderPromo(int packID, int orderId){
+		packManager.refresh();
+		int oIndex = findIndex(orderId);
+        int pIndex = packManager.findIndex(packID);
         if (oIndex != -1 && pIndex != -1){
-        	OrderList.get(oIndex).addItemToPromo(packID);
-        	System.out.println("Added Item to Order " + OrderID);
+        	orderList.get(oIndex).addItemToPromo(packID);
+        	System.out.println("Added Promotional Package Item to Order ");
+        	IOHandler.writeSerializedObject(FName, orderList);
         }
 	}
 
-	public void removeItemFromOrderAlaCarte(int alaCarteID, int OrderID){
-		int oIndex = findIndex(OrderID);
-		int aIndex = AlaManager.findIndex(alaCarteID);
+	public void removeItemFromOrderAlaCarte(int orderId, int alaCarteId){
+		alaManager.refresh();
+		int oIndex = findIndex(orderId);
+		int aIndex = alaManager.findIndex(alaCarteID);
 		if(oIndex != -1 && aIndex != -1){
-			OrderList.get(oIndex).removeItemFromAlaCarte(alaCarteID);
+			if(orderList.get(oIndex).getAlaCarteIdList().contains(alaCarteId)){
+				orderList.get(oIndex).removeItemFromAlaCarte(alaCarteID);
+				System.out.println("Ala Carte item deleted from order");
+				IOHandler.writeSerializedObject(FName, orderList);
+			}
+			else{
+				System.out.println("Ala Carte item has not been added to order before");
+			}
 		}
 	}
-	public void removeItemFromOrderPromo(int packID, int OrderID){
-		int oIndex = findIndex(OrderID);
-		int pIndex = PackManager.findIndex(packID);
+	public void removeItemFromOrderPromo(int orderId, int packId){
+		packManager.refresh();
+		int oIndex = findIndex(orderId);
+		int pIndex = packManager.findIndex(packID);
 		if(oIndex != -1 && pIndex != -1){
-			OrderList.get(oIndex).removeItemFromPromo(packID);
+			if(orderList.get(oIndex).getPackageIdList().contains(packId)){
+				orderList.get(oIndex).removeItemFromPromo(packID);
+				System.out.println("Promotional Package item deleted from order");
+				IOHandler.writeSerializedObject(FName, orderList);
+			}
+			else{
+				System.out.println("Promotional Package item has not been added to order before");
+			}
 		}
 	}
-	
-	
-	public float CalculateTotal(int OrderID){
-		float total = 0;
-		int oIndex = findIndex(OrderID);
-		for(int i=0; i < OrderList.get(oIndex).getAlaCarteIDList().size(); i++){
-			total = total + AlaManager.getAlaCarteById(OrderList.get(oIndex).getAlaCarteIDList().get(i)).getPrice();
-		}
-		for(int i=0; i< OrderList.get(oIndex).getPackageIDList().size(); i++){
-			total = total + PackManager.getPromoById(OrderList.get(oIndex).getPackageIDList().get(i)).getPrice();
-		}
 		
+	public float CalculateTotal(int orderId){
+		float total = 0;
+		int oIndex = findIndex(orderId);
+		List <Integer> alaIdList = orderList.get(oIndex).getAlaCarteIdList();
+		List <Integer> promoIdList = orderList.get(oIndex).getPackageIdList();
+		for(int i=0; i < alaIdList.size(); i++){
+			float price =  alaManager.getAlaCarteById(orderList.get(oIndex).getAlaCarteIdList().get(i)).getPrice();
+			int quantity = orderList.get(oIndex).getAmountAlaCarteId(alaIdList.get(i));
+			total = total + price * quantity;
+		}
+		for(int i=0; i< promoIdList.size(); i++){
+			float price = packManager.getPromoById(orderList.get(oIndex).getPackageIdList().get(i)).getPrice();
+			int quantity = orderList.get(oIndex).getAmountPackageId(promoIdList.get(i));
+			total = total + price * quantity;
+		}	
 		return total;
 	}
 	
-	public void viewOrder(int OrderID){
-		int oIndex = findIndex(OrderID);
-		List <Integer> AlaIDList = OrderList.get(oIndex).getAlaCarteIDList();
-		for(int i=0; i < AlaIDList.size(); i++){
-			System.out.println(AlaManager.getAlaCarteById(AlaIDList.get(i)).getName() + " " + AlaManager.getAlaCarteById(AlaIDList.get(i)).getPrice());
-		}
-		List <Integer> PromoIDList = OrderList.get(oIndex).getPackageIDList(); 
-		for(int i=0; i< PromoIDList.size(); i++){
-			System.out.println("Package " + PromoIDList + " " + PackManager.getPromoById(OrderList.get(oIndex).getPackageIDList().get(i)).getPrice());
+	public void viewOrder(int orderId){
+		int oIndex = findIndex(orderId);
+		List <Integer> alaIdList = orderList.get(oIndex).getAlaCarteIdList();
+		List <Integer> promoIdList = orderList.get(oIndex).getPackageIdList();
+		for(int i=0; i < alaIdList.size(); i++){
+			String name = alaManager.getAlaCarteById(alaIdList.get(i)).getName();
+			float price = alaManager.getAlaCarteById(alaIdList.get(i)).getPrice();
+			int quantity = orderList.get(oIndex).getAmountAlaCarteId(alaIdList.get(i));
+			System.out.println(name + " " + quantity + " " + price * quantity);
+		} 
+		for(int i=0; i< promoIdList.size(); i++){
+			String name = "Package " + promoIdList.get(i);
+			float price = packManager.getPromoById(promoIdList.get(i)).getPrice();
+			int quantity = orderList.get(oIndex).getAmountPackageId(promoIdlest.get(i));
+			System.out.println(name + " " + quantity + " " + price * quantity);
 		}
 	}
 	
+	public void printInvoice(int orderId){
+		int oIndex = findIndex(orderId);
+		int tableId = orderList.get(oIndex).getTableId();
+		Calender cal = orderList.get(oIndex).getDateTime();
+		double total;
+		System.out.println("	Delicious Food Restaurant	");
+		System.out.println("		12 Newton Street		");
+		System.out.println("		   Singapore			");
+		System.out.println("		Tel: 123-456-7000		");
+		System.out.println("			Order ID: " + orderId);
+		System.out.println("			Table ID: " + tableId);
+		System.out.println("		  " + Calendar.getInstance());
+		this.viewOrder(orderId);
+		total = CalculateTotal(orderId);
+		System.out.println("Subtotal.....		" + total);
+		System.out.println("10% Service Charge	" + 0.1 * total);
+		total = total + 0.1 * total;
+		System.out.println("7%GST				" + 0.07 * total);
+		total = total + 0.07 * total;
+		System.out.println("Total				" + total);
+		
+		tManager.updateStatus(cal, tableId, 0);
+	}
+	
 	public void SalesRevenueReport(Date period){
+		int amountAlaCarte[] = new int(100);
+		int amountPackage[] = new int(100);
 		String strDate = period.toString();
-		for(int i=0; i < OrderList.size(); i++){
-			if(strDate == OrderList.get(i).getDateTime().toString()){
-				System.out.println(CalculateTotal(OrderList.get(i).getOrderID()));
+		float total = 0;
+		System.out.println(strDate);
+		for(int i=0; i < orderList.size(); i++){
+			if(strDate == orderList.get(i).getDateTime().toString()){
+				total = total + CalculateTotal(orderList.get(i).getOrderId());
+				for(int j=0; j < orderList.get(i).getAlaCarteIdList().size(); j++){
+					List <integer> alaCarte = orderList.get(i).getAlaCarteIdList();
+					amountAlaCarte[alaCarte.get(j)] += orderList.get(i).getAmountAlaCarteId(alaCarte.get(j));
+				}
+				for(int j=0; j < orderList.get(i).getPackageIdList().size(); j++){
+					List <integer> promo = orderList.get(i).getPackageIdList();
+					amountPackage[promo.get(j)] += orderList.get(i).getAmountPackageId(promo.get(j));
+				}
 			}
+		}
+		for(int i = 1; i < 100; i++){
+			String name = alaManager.getAlaCarteById(i).getName();
+			System.out.println(name + " " + amountAlaCarte[i]);
+		}
+		for(int i = 1; i < 100; i++){
+			String name = "Package " +  packManager.getPromoById(i).getId();
+			System.out.println(name + " " + amountPackage[i]);
 		}
 	}
+	
 	public void SalesRevenueReport(int month){
-		for(int i=0; i<OrderList.size(); i++){
-			if(OrderList.get(i).getDateTime().get(Calendar.MONTH) == month){
-				System.out.println(CalculateTotal(OrderList.get(i).getOrderID()));
+		int amountAlaCarte[] = new int(100);
+		int amountPackage[] = new int(100);
+		float total = 0;
+		System.out.println("Month " + month);
+		for(int i=0; i<orderList.size(); i++){
+			if(orderList.get(i).getDateTime().get(Calendar.MONTH) == month){
+				total = total + CalculateTotal(orderList.get(i).getOrderId());
+				for(int j=0; j < orderList.get(i).getAlaCarteIdList().size(); j++){
+					List <integer> alaCarte = orderList.get(i).getAlaCarteIdList();
+					amountAlaCarte[alaCarte.get(j)] += orderList.get(i).getAmountAlaCarteId(alaCarte.get(j));
+				}
+				for(int j=0; j < orderList.get(i).getPackageIdList().size(); j++){
+					List <integer> promo = orderList.get(i).getPackageIdList();
+					amountPackage[promo.get(j)] += orderList.get(i).getAmountPackageId(promo.get(j));
+				}
 			}
 		}
+		for(int i = 1; i < 100; i++){
+			String name = alaManager.getAlaCarteById(i).getName();
+			System.out.println(name + " " + amountAlaCarte[i]);
+		}
+		for(int i = 1; i < 100; i++){
+			String name = "Package " +  packManager.getPromoById(i).getId();
+			System.out.println(name + " " + amountPackage[i]);
+		}
+		System.out.println("Total Revenue " + total);
+	}
+	
+	public void refresh(){
+		this.orderList = (ArrayList) IOHandler.readSerializedObject(FName);
 	}
 }

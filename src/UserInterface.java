@@ -244,7 +244,7 @@ public class UserInterface {
     }
 
     public static void createOrder(){
-        System.out.println("");
+        createOrder(5);
     }
 
     public static void viewOrder(){

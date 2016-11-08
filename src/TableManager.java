@@ -11,7 +11,7 @@ public class TableManager {
         if (this.tables.isEmpty()) createTable();
     }
 
-    private boolean resIsOpen(Calendar dateTime) {
+    public boolean resIsOpen(Calendar dateTime) {
         if ((dateTime.get(Calendar.HOUR_OF_DAY) >= 11 && dateTime.get(Calendar.HOUR_OF_DAY) <= 14) ||
                 (dateTime.get(Calendar.HOUR_OF_DAY) >= 18 && dateTime.get(Calendar.HOUR_OF_DAY) <= 21)) {
             return true;
