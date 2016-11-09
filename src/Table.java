@@ -30,7 +30,7 @@ public class Table implements Serializable {
     public int getStatus(Calendar dateTime, int shift) {
         int month = dateTime.get(Calendar.MONTH);
         int day = dateTime.get(Calendar.DAY_OF_MONTH);
-        if (shift != -1){
+        if (shift != -1) {
             return this.status[month][day - 1][shift];
         }
         return -1;
@@ -39,7 +39,7 @@ public class Table implements Serializable {
     public void setStatus(Calendar dateTime, int status, int shift) {
         int month = dateTime.get(Calendar.MONTH);
         int day = dateTime.get(Calendar.DAY_OF_MONTH);
-        if (shift != -1){
+        if (shift != -1) {
             this.status[month][day - 1][shift] = status;
         }
     }

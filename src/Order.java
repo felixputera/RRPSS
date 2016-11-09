@@ -59,7 +59,7 @@ public class Order implements Serializable {
     }
 
     public int getAlaCarteQty(int alaCarteId) {
-        for (Integer[] i : alaCarteIdNQtyList){
+        for (Integer[] i : alaCarteIdNQtyList) {
             if (i[0] == alaCarteId) {
                 return i[1];
             }
@@ -68,7 +68,7 @@ public class Order implements Serializable {
     }
 
     public int getPromoQty(int promoId) {
-        for (Integer[] i : packageIdNQtyList){
+        for (Integer[] i : packageIdNQtyList) {
             if (i[0] == promoId) {
                 return i[1];
             }
@@ -78,13 +78,13 @@ public class Order implements Serializable {
 
     public void addItemAlaCarte(int alaCarteId) {
         boolean found = false;
-        for (Integer[] i : alaCarteIdNQtyList){
+        for (Integer[] i : alaCarteIdNQtyList) {
             if (i[0] == alaCarteId) {
                 alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[1] += 1;
                 found = true;
             }
         }
-        if (!found){
+        if (!found) {
             alaCarteIdNQtyList.add(new Integer[2]);
             alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[0] = alaCarteId;
             alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[1] = 1;
@@ -93,13 +93,13 @@ public class Order implements Serializable {
 
     public void addItemPromo(int promoId) {
         boolean found = false;
-        for (Integer[] p : packageIdNQtyList){
+        for (Integer[] p : packageIdNQtyList) {
             if (p[0] == promoId) {
                 packageIdNQtyList.get(packageIdNQtyList.size() - 1)[1] += 1;
                 found = true;
             }
         }
-        if (!found){
+        if (!found) {
             packageIdNQtyList.add(new Integer[2]);
             packageIdNQtyList.get(packageIdNQtyList.size() - 1)[0] = promoId;
             packageIdNQtyList.get(packageIdNQtyList.size() - 1)[1] = 1;
@@ -107,7 +107,7 @@ public class Order implements Serializable {
     }
 
     public void removeItemAlaCarte(int alaCarteId) {
-        for (Integer[] i : alaCarteIdNQtyList){
+        for (Integer[] i : alaCarteIdNQtyList) {
             if (i[0] == alaCarteId) {
                 i[1]--;
             }
@@ -116,7 +116,7 @@ public class Order implements Serializable {
     }
 
     public void removeItemPromo(int promoId) {
-        for (Integer[] i : packageIdNQtyList){
+        for (Integer[] i : packageIdNQtyList) {
             if (i[0] == promoId) {
                 i[1]--;
             }
