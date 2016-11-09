@@ -8,20 +8,14 @@ public class Order implements Serializable {
     private int tableId;
     private int staffId;
     private Calendar dateTime;
-    private List<Integer> alaCarteIdList = new ArrayList<Integer>();
-    private List<Integer> packageIdList = new ArrayList<Integer>();
-    private int amountAlaCarteId[] = new int[100];
-    private int amountPackageId[] = new int[100];
+    private List<Integer[]> alaCarteIdNQtyList = new ArrayList<>();
+    private List<Integer[]> packageIdNQtyList = new ArrayList<>();
 
     public Order(int id, Calendar reserve, int tId, int sId) {
         this.orderId = id;
         this.dateTime = reserve;
         this.tableId = tId;
         this.staffId = sId;
-        for (int i = 0; i < 100; i++) {
-            amountAlaCarteId[i] = 0;
-            amountPackageId[i] = 0;
-        }
     }
 
     public int getOrderId() {
@@ -56,47 +50,59 @@ public class Order implements Serializable {
         this.staffId = sId;
     }
 
-    public List<Integer> getAlaCarteIdList() {
-        return this.alaCarteIdList;
+    public List<Integer[]> getAlaCarteIdNQtyList() {
+        return this.alaCarteIdNQtyList;
     }
 
-    public List<Integer> getPackageIdList() {
-        return this.packageIdList;
+    public List<Integer[]> getPackageIdNQtyList() {
+        return this.packageIdNQtyList;
     }
 
-    public int getAmountAlaCarteId(int alaId) {
-        return this.amountAlaCarteId[alaId];
-    }
-
-    public int getAmountPackageId(int packId) {
-        return this.amountPackageId[packId];
-    }
-
-    public void addItemToAlaCarte(int alaCarteId) {
-        if (amountAlaCarteId[alaCarteId] == 0) {
-            this.alaCarteIdList.add(alaCarteId);
+    public int getAlaCarteQty(int alaCarteId) {
+        for (Integer[] i : alaCarteIdNQtyList){
+            if (i[0] == alaCarteId) {
+                return i[1];
+            }
         }
-        amountAlaCarteId[alaCarteId] = amountAlaCarteId[alaCarteId] + 1;
+        return 0;
     }
 
-    public void addItemToPromo(int promoId) {
-        if (amountPackageId[promoId] == 0) {
-            this.packageIdList.add(promoId);
+    public int getPromoQty(int promoId) {
+        for (Integer[] i : packageIdNQtyList){
+            if (i[0] == promoId) {
+                return i[1];
+            }
         }
-        amountPackageId[promoId] = amountPackageId[promoId] + 1;
+        return 0;
     }
 
-    public void removeItemFromAlaCarte(int alaCarteId) {
-        amountAlaCarteId[alaCarteId] = amountPackageId[alaCarteId] - 1;
-        if (amountAlaCarteId[alaCarteId] == 0) {
-            alaCarteIdList.remove(alaCarteId);
-        }
+    public void addItemAlaCarte(int alaCarteId) {
+        alaCarteIdNQtyList.add(new Integer[2]);
+        alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[0] = alaCarteId;
+        alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[1]++;
     }
 
-    public void removeItemFromPromo(int promoId) {
-        amountPackageId[promoId] = amountPackageId[promoId] - 1;
-        if (amountPackageId[promoId] == 0) {
-            packageIdList.remove(promoId);
+    public void addItemPromo(int promoId) {
+        alaCarteIdNQtyList.add(new Integer[2]);
+        alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[0] = promoId;
+        alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[1]++;
+    }
+
+    public void removeItemAlaCarte(int alaCarteId) {
+        for (Integer[] i : alaCarteIdNQtyList){
+            if (i[0] == alaCarteId) {
+                i[1]--;
+            }
         }
+        alaCarteIdNQtyList.removeIf(i -> i[1] == 0);
+    }
+
+    public void removeItemPromo(int promoId) {
+        for (Integer[] i : packageIdNQtyList){
+            if (i[0] == promoId) {
+                i[1]--;
+            }
+        }
+        alaCarteIdNQtyList.removeIf(i -> i[1] == 0);
     }
 }
