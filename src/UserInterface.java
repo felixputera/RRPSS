@@ -9,9 +9,11 @@ public class UserInterface {
     static PPackageManager pmanage = new PPackageManager();
     static Scanner sc = new Scanner(System.in);
     static TableManager tm = new TableManager();
-    static Calendar c = Calendar.getInstance();
+    static Calendar c1 = Calendar.getInstance();
+    static Calendar c2 = Calendar.getInstance();
     static ReservationManager rm = new ReservationManager();
-    static SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+    static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
     static OrderManager om = new OrderManager();
     static StaffManager sm = new StaffManager();
 
@@ -80,7 +82,7 @@ public class UserInterface {
                     break;
 
                 case 10:
-                    System.out.print("EXIT APPLICATION ...");
+                    System.out.println("EXIT APPLICATION ...");
 
                 case 11:
                     printSaleReport();
@@ -289,6 +291,9 @@ public class UserInterface {
                 staffId = sc.nextInt();
 
                 om.createOrderReservation(contactNo, staffId);
+                om.refresh();
+                rm.refresh();
+                tm.refresh();
                 break;
         }
     }
@@ -305,7 +310,7 @@ public class UserInterface {
         System.out.print("Order ID to modify: ");
         int oid = sc.nextInt();
 
-        System.out.println("1. Add menu item; 2. Add promotion item; 3. Remove menu item; 4. Remove promotion item\n" +
+        System.out.println("1. Add menu item; 2. Remove menu item; 3. Add promotion item; 4. Remove promotion item\n" +
                 "5. EXIT modifying order");
         System.out.print("Input: ");
         int choice = sc.nextInt();
@@ -352,7 +357,7 @@ public class UserInterface {
                     break;
             }
 
-            System.out.println("1. Add menu item; 2. Add promotion item; 3. Remove menu item; 4. Remove promotion item\n" +
+            System.out.println("1. Add menu item; 2. Remove menu item; 3. Add promotion item; 4. Remove promotion item\n" +
                     "5. EXIT modifying order");
             System.out.print("Input: ");
             choice = sc.nextInt();
@@ -366,12 +371,12 @@ public class UserInterface {
         Date dateTime = null;
 
         try {
-            dateTime = sdf.parse(dateString);
+            dateTime = dateTimeFormat.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        c.setTime(dateTime);
+        c1.setTime(dateTime);
 
         System.out.print("Number of people: ");
         int pax = sc.nextInt();
@@ -383,7 +388,7 @@ public class UserInterface {
         System.out.print("Contact number: ");
         int contactNo = sc.nextInt();
 
-        rm.createReservation(c, pax, name, contactNo);
+        rm.createReservation(c1, pax, name, contactNo);
         rm.refresh();
     }
 
@@ -444,16 +449,16 @@ public class UserInterface {
                         dateString = sc.nextLine();
 
                         try {
-                            dateTime = sdf.parse(dateString);
+                            dateTime = dateTimeFormat.parse(dateString);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
-                        c.setTime(dateTime);
+                        c1.setTime(dateTime);
 
                         rm.refresh();
                         tm.refresh();
-                        tm.checkAvailabilityByID(tid, c);
+                        tm.checkAvailabilityByID(tid, c1);
                         break;
 
                     case 2:
@@ -480,16 +485,16 @@ public class UserInterface {
                         dateString = sc.nextLine();
 
                         try {
-                            dateTime = sdf.parse(dateString);
+                            dateTime = dateTimeFormat.parse(dateString);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
-                        c.setTime(dateTime);
+                        c1.setTime(dateTime);
 
                         rm.refresh();
                         tm.refresh();
-                        tm.checkAvailabilityBySize(size, c);
+                        tm.checkAvailabilityBySize(size, c1);
                         break;
 
                     case 2:
@@ -513,16 +518,16 @@ public class UserInterface {
                         dateString = sc.nextLine();
 
                         try {
-                            dateTime = sdf.parse(dateString);
+                            dateTime = dateTimeFormat.parse(dateString);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
-                        c.setTime(dateTime);
+                        c1.setTime(dateTime);
 
                         rm.refresh();
                         tm.refresh();
-                        tm.checkAllTableAvailability(c);
+                        tm.checkAllTableAvailability(c1);
                         break;
 
                     case 2:
@@ -555,21 +560,40 @@ public class UserInterface {
 
         switch (choice) {
             case 1:
-                System.out.print("Month (0 to 11): ");
-                month = sc.nextInt();
+                System.out.print("Month (1 to 12): ");
+                month = sc.nextInt() - 1;
 
                 om.refresh();
                 om.salesRevenueReport(month);
                 break;
 
             case 2:
-                System.out.print("Year Month Day: ");
-                year = sc.nextInt();
-                month = sc.nextInt();
-                day = sc.nextInt();
+                System.out.print("Start date (MM-dd-yyyy): ");
+                sc.nextLine(); //clear buffer
+                String dateString = sc.nextLine();
+                Date dateTime = null;
+
+                try {
+                    dateTime = dateFormat.parse(dateString);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                c1.setTime(dateTime);
+
+                System.out.print("End date (MM-dd-yyyy): ");
+                dateString = sc.nextLine();
+
+                try {
+                    dateTime = dateFormat.parse(dateString);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                c2.setTime(dateTime);
 
                 om.refresh();
-                om.salesRevenueReport(year, month, day);
+                om.salesRevenueReport(c1, c2);
                 break;
         }
     }

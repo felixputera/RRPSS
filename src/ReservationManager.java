@@ -29,6 +29,14 @@ public class ReservationManager {
         return true;
     }
 
+    private int getTableIDByContactNumber(int contactNo) {
+        for (Reservation r : reserveList) {
+            if (r.getContactNumber() == contactNo) return r.getTableID();
+        }
+        System.out.println("Contact number not found");
+        return -1;
+    }
+
     public void createReservation(Calendar dateTime, int pax, String name, int contactNo) {
         tableManage.refresh();
         int emptyID = tableManage.findEmptyTable(pax, dateTime);
@@ -83,11 +91,19 @@ public class ReservationManager {
         }
     }
 
-    public int getTableIDByContactNumber(int contactNo) {
-        for (Reservation r : reserveList) {
-            if (r.getContactNumber() == contactNo) return r.getTableID();
+    public int checkInReservation(int contactNo){
+        Calendar now = Calendar.getInstance();
+        int index = getTableIDByContactNumber(contactNo);
+        Reservation res = reserveList.get(index);
+        if (index != -1){
+            if ((res.getDateTime().get(Calendar.YEAR) == now.get(Calendar.YEAR)) &&
+                    (res.getDateTime().get(Calendar.MONTH) == now.get(Calendar.MONTH)) &&
+                    (res.getDateTime().get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH))){
+                if (tableManage.getShift(res.getDateTime()) == tableManage.getShift(now))
+                    return getTableIDByContactNumber(contactNo);
+                System.out.println("Reservation was made for other time, come again later");
+            }
         }
-        System.out.println("Contact number not found");
         return -1;
     }
 

@@ -27,23 +27,20 @@ public class Table implements Serializable {
         this.size = size;
     }
 
-    public int getStatus(Calendar dateTime) {
+    public int getStatus(Calendar dateTime, int shift) {
         int month = dateTime.get(Calendar.MONTH);
         int day = dateTime.get(Calendar.DAY_OF_MONTH);
-        if (dateTime.get(Calendar.HOUR_OF_DAY) >= 11 && dateTime.get(Calendar.HOUR_OF_DAY) <= 14)
-            return this.status[month][day - 1][0];
-        else if (dateTime.get(Calendar.HOUR_OF_DAY) >= 18 && dateTime.get(Calendar.HOUR_OF_DAY) <= 21)
-            return this.status[month][day - 1][1];
-        else
-            return -1;
+        if (shift != -1){
+            return this.status[month][day - 1][shift];
+        }
+        return -1;
     }
 
-    public void setStatus(Calendar dateTime, int status) {
+    public void setStatus(Calendar dateTime, int status, int shift) {
         int month = dateTime.get(Calendar.MONTH);
         int day = dateTime.get(Calendar.DAY_OF_MONTH);
-        if (dateTime.get(Calendar.HOUR_OF_DAY) >= 11 && dateTime.get(Calendar.HOUR_OF_DAY) <= 14)
-            this.status[month][day - 1][0] = status;
-        else if (dateTime.get(Calendar.HOUR_OF_DAY) >= 18 && dateTime.get(Calendar.HOUR_OF_DAY) <= 21)
-            this.status[month][day - 1][1] = status;
+        if (shift != -1){
+            this.status[month][day - 1][shift] = status;
+        }
     }
 }

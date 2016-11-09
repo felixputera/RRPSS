@@ -11,17 +11,6 @@ public class TableManager {
         if (this.tables.isEmpty()) createTable();
     }
 
-    public boolean resIsOpen(Calendar dateTime) {
-        if ((dateTime.get(Calendar.HOUR_OF_DAY) >= 11 && dateTime.get(Calendar.HOUR_OF_DAY) <= 14) ||
-                (dateTime.get(Calendar.HOUR_OF_DAY) >= 18 && dateTime.get(Calendar.HOUR_OF_DAY) <= 21)) {
-            return true;
-        } else {
-            System.out.println("Restaurant not operating at that time");
-            System.out.println();
-            return false;
-        }
-    }
-
     private String statusIntToString(int status) {
         switch (status) {
             case 0:
@@ -59,6 +48,26 @@ public class TableManager {
         IOHandler.writeSerializedObject(FName, tables);
     }
 
+    public int getShift(Calendar dateTime) {
+        if (dateTime.get(Calendar.HOUR_OF_DAY) >= 11 && dateTime.get(Calendar.HOUR_OF_DAY) <= 14)
+            return 0;
+        else if (dateTime.get(Calendar.HOUR_OF_DAY) >= 18 && dateTime.get(Calendar.HOUR_OF_DAY) <= 21)
+            return 1;
+        else
+            return -1;
+    }
+
+    public boolean resIsOpen(Calendar dateTime) {
+        if ((dateTime.get(Calendar.HOUR_OF_DAY) >= 11 && dateTime.get(Calendar.HOUR_OF_DAY) <= 14) ||
+                (dateTime.get(Calendar.HOUR_OF_DAY) >= 18 && dateTime.get(Calendar.HOUR_OF_DAY) <= 21)) {
+            return true;
+        } else {
+            System.out.println("Restaurant not operating at that time");
+            System.out.println();
+            return false;
+        }
+    }
+
     public int findIndex(int tableID) {
         for (int i = 0; i < tables.size(); i++) {
             if (tables.get(i).getTableID() == tableID) return i;
@@ -71,7 +80,7 @@ public class TableManager {
         if (resIsOpen(dateTime)) {
             int i = findIndex(id);
             if (i != -1) {
-                tables.get(i).setStatus(dateTime, status);
+                tables.get(i).setStatus(dateTime, status, getShift(dateTime));
                 System.out.println("Status updated");
                 IOHandler.writeSerializedObject(FName, tables);
             }
@@ -84,7 +93,7 @@ public class TableManager {
             if (i != -1) {
                 Table t = tables.get(i);
                 System.out.println("Table ID: " + t.getTableID());
-                System.out.print("Status: " + statusIntToString(t.getStatus(dateTime)));
+                System.out.print("Status: " + statusIntToString(t.getStatus(dateTime, getShift(dateTime))));
                 System.out.println();
             }
         }
@@ -96,7 +105,7 @@ public class TableManager {
                 Table t = tables.get(i);
                 if (t.getSize() == size) {
                     System.out.println("Table ID: " + t.getTableID());
-                    System.out.print("Status: " + statusIntToString(t.getStatus(dateTime)));
+                    System.out.print("Status: " + statusIntToString(t.getStatus(dateTime, getShift(dateTime))));
                     System.out.println();
                 }
             }
@@ -108,7 +117,7 @@ public class TableManager {
             for (int i = 0; i < tables.size(); i++) {
                 Table t = tables.get(i);
                 System.out.println("Table ID: " + t.getTableID());
-                System.out.print("Status: " + statusIntToString(t.getStatus(dateTime)));
+                System.out.print("Status: " + statusIntToString(t.getStatus(dateTime, getShift(dateTime))));
                 System.out.println();
             }
         }
@@ -118,7 +127,7 @@ public class TableManager {
         for (int i = 0; i < tables.size(); i++) {
             Table t = tables.get(i);
             if (t.getSize() >= pax) {
-                if (t.getStatus(dateTime) == 0) {
+                if (t.getStatus(dateTime, getShift(dateTime)) == 0) {
                     return t.getTableID();
                 }
             }

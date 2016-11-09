@@ -77,15 +77,33 @@ public class Order implements Serializable {
     }
 
     public void addItemAlaCarte(int alaCarteId) {
-        alaCarteIdNQtyList.add(new Integer[2]);
-        alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[0] = alaCarteId;
-        alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[1]++;
+        boolean found = false;
+        for (Integer[] i : alaCarteIdNQtyList){
+            if (i[0] == alaCarteId) {
+                alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[1] += 1;
+                found = true;
+            }
+        }
+        if (!found){
+            alaCarteIdNQtyList.add(new Integer[2]);
+            alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[0] = alaCarteId;
+            alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[1] = 1;
+        }
     }
 
     public void addItemPromo(int promoId) {
-        alaCarteIdNQtyList.add(new Integer[2]);
-        alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[0] = promoId;
-        alaCarteIdNQtyList.get(alaCarteIdNQtyList.size() - 1)[1]++;
+        boolean found = false;
+        for (Integer[] p : packageIdNQtyList){
+            if (p[0] == promoId) {
+                packageIdNQtyList.get(packageIdNQtyList.size() - 1)[1] += 1;
+                found = true;
+            }
+        }
+        if (!found){
+            packageIdNQtyList.add(new Integer[2]);
+            packageIdNQtyList.get(packageIdNQtyList.size() - 1)[0] = promoId;
+            packageIdNQtyList.get(packageIdNQtyList.size() - 1)[1] = 1;
+        }
     }
 
     public void removeItemAlaCarte(int alaCarteId) {
