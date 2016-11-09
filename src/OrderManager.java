@@ -162,15 +162,15 @@ public class OrderManager {
             String name = alaManager.getAlaCarteById(alaCarte[0]).getName();
             float price = alaManager.getAlaCarteById(alaCarte[0]).getPrice();
             int quantity = alaCarte[1];
-            System.out.println(name + " x" + quantity + " " + price * quantity);
-            ord = ord + name + " x" + quantity + " " + price * quantity + "\n";
+            System.out.println(name + " x" + quantity + " ... " + price * quantity);
+            ord = ord + name + " x" + quantity + " ... " + price * quantity + "\n";
         }
         for (Integer[] promo : promoIdList) {
             String name = "Package " + promo[0];
             float price = packManager.getPromoById(promo[0]).getPrice();
             int quantity = promo[1];
-            System.out.println(name + " x" + quantity + " " + price * quantity);
-            ord = ord + name + " x" + quantity + " " + price * quantity + "\n";
+            System.out.println(name + " x" + quantity + " ... " + price * quantity);
+            ord = ord + name + " x" + quantity + " ... " + price * quantity + "\n";
         }
         return ord;
     }
@@ -225,8 +225,8 @@ public class OrderManager {
     }
 
     public void salesRevenueReport(Calendar start, Calendar end) {
-        int amountAlaCarte[] = new int[alaManager.menuSize() + 1];
-        int amountPackage[] = new int[packManager.menuSize() + 1];
+        int qtyAlaCarte[] = new int[alaManager.menuSize() + 1];
+        int qtyPackage[] = new int[packManager.menuSize() + 1];
         float total = 0;
         int sMonth = start.get(Calendar.MONTH);
         int sDate = start.get(Calendar.DAY_OF_MONTH);
@@ -243,28 +243,28 @@ public class OrderManager {
                 total = total + CalculateTotal(o.getOrderId());
                 for (int j = 0; j < o.getAlaCarteIdNQtyList().size(); j++) {
                     List<Integer[]> alaCarte = o.getAlaCarteIdNQtyList();
-                    amountAlaCarte[alaCarte.get(j)[0]] += alaCarte.get(j)[1];
+                    qtyAlaCarte[alaCarte.get(j)[0]] += alaCarte.get(j)[1];
                 }
                 for (int j = 0; j < o.getPackageIdNQtyList().size(); j++) {
                     List<Integer[]> promo = o.getPackageIdNQtyList();
-                    amountPackage[promo.get(j)[0]] += promo.get(j)[1];
+                    qtyPackage[promo.get(j)[0]] += promo.get(j)[1];
                 }
             }
         }
         for (int i = 1; i <= alaManager.menuSize(); i++) {
             String name = alaManager.getAlaCarteById(i).getName();
-            System.out.println(name + " x" + amountAlaCarte[i]);
+            System.out.println(name + " x" + qtyAlaCarte[i] + " ... " + alaManager.getAlaCarteById(i).getPrice());
         }
         for (int i = 1; i <= packManager.menuSize(); i++) {
             String name = "Package " + i;
-            System.out.println(name + " x" + amountPackage[i]);
+            System.out.println(name + " x" + qtyPackage[i] + " ... " + packManager.getPromoById(i).getPrice());
         }
         System.out.println("Total Revenue " + total);
     }
 
     public void salesRevenueReport(int month) {
-        int amountAlaCarte[] = new int[alaManager.menuSize() + 1];
-        int amountPackage[] = new int[packManager.menuSize() + 1];
+        int qtyAlaCarte[] = new int[alaManager.menuSize() + 1];
+        int qtyPackage[] = new int[packManager.menuSize() + 1];
         float total = 0;
         System.out.println("Sales Report: Month " + (month + 1));
         for (Order o : orderList) {
@@ -272,21 +272,21 @@ public class OrderManager {
                 total = total + CalculateTotal(o.getOrderId());
                 for (int j = 0; j < o.getAlaCarteIdNQtyList().size(); j++) {
                     List<Integer[]> alaCarte = o.getAlaCarteIdNQtyList();
-                    amountAlaCarte[alaCarte.get(j)[0]] += alaCarte.get(j)[1];
+                    qtyAlaCarte[alaCarte.get(j)[0]] += alaCarte.get(j)[1];
                 }
                 for (int j = 0; j < o.getPackageIdNQtyList().size(); j++) {
                     List<Integer[]> promo = o.getPackageIdNQtyList();
-                    amountPackage[promo.get(j)[0]] += promo.get(j)[1];
+                    qtyPackage[promo.get(j)[0]] += promo.get(j)[1];
                 }
             }
         }
         for (int i = 1; i <= alaManager.menuSize(); i++) {
             String name = alaManager.getAlaCarteById(i).getName();
-            System.out.println(name + " " + amountAlaCarte[i]);
+            System.out.println(name + " x" + qtyAlaCarte[i] + " ... " + alaManager.getAlaCarteById(i).getPrice());
         }
         for (int i = 1; i <= packManager.menuSize(); i++) {
             String name = "Package " + i;
-            System.out.println(name + " " + amountPackage[i]);
+            System.out.println(name + " x" + qtyPackage[i] + " ... " + packManager.getPromoById(i).getPrice());
         }
         System.out.println("Total Revenue " + total);
     }

@@ -83,6 +83,7 @@ public class UserInterface {
 
                 case 10:
                     System.out.println("EXIT APPLICATION ...");
+                    break;
 
                 case 11:
                     printSaleReport();
