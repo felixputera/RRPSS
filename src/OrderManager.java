@@ -112,7 +112,7 @@ public class OrderManager {
         }
     }
 
-    public void removeItemFromOrderAlaCarte(int orderId, int alaCarteId) {
+    public void removeItemFromOrderAlaCarte(int alaCarteId, int orderId) {
         alaManager.refresh();
         int oIndex = findIndex(orderId);
         int aIndex = alaManager.findIndex(alaCarteId);
@@ -127,7 +127,7 @@ public class OrderManager {
         }
     }
 
-    public void removeItemFromOrderPromo(int orderId, int packId) {
+    public void removeItemFromOrderPromo(int packId, int orderId) {
         packManager.refresh();
         int oIndex = findIndex(orderId);
         int pIndex = packManager.findIndex(packId);
