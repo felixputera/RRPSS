@@ -7,6 +7,7 @@ public class Order implements Serializable {
     private int orderId;
     private int tableId;
     private int staffId;
+    private boolean paid = false;
     private Calendar dateTime;
     private List<Integer[]> alaCarteIdNQtyList = new ArrayList<>();
     private List<Integer[]> packageIdNQtyList = new ArrayList<>();
@@ -48,6 +49,14 @@ public class Order implements Serializable {
 
     public void setStaffId(int sId) {
         this.staffId = sId;
+    }
+
+    public boolean isPaid() {
+        return this.paid;
+    }
+
+    public void setPaid() {
+        this.paid = true;
     }
 
     public List<Integer[]> getAlaCarteIdNQtyList() {

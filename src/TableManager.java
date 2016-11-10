@@ -62,7 +62,7 @@ public class TableManager {
                 (dateTime.get(Calendar.HOUR_OF_DAY) >= 18 && dateTime.get(Calendar.HOUR_OF_DAY) <= 21)) {
             return true;
         } else {
-            System.out.println("Restaurant not operating at that time");
+            System.out.println("Restaurant not operating at the time");
             System.out.println();
             return false;
         }
@@ -117,8 +117,8 @@ public class TableManager {
             for (int i = 0; i < tables.size(); i++) {
                 Table t = tables.get(i);
                 System.out.println("Table ID: " + t.getTableID());
-                System.out.print("Status: " + statusIntToString(t.getStatus(dateTime, getShift(dateTime))));
-                System.out.println();
+                System.out.println("Status: " + statusIntToString(t.getStatus(dateTime, getShift(dateTime))));
+                System.out.println("Size: " + t.getSize());
             }
         }
     }

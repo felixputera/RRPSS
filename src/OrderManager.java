@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -13,6 +14,13 @@ public class OrderManager {
 
     public OrderManager() {
         this.orderList = (ArrayList) IOHandler.readSerializedObject(FName);
+    }
+
+    private boolean orderContains (List<Integer[]> list, int id){
+        for (Integer[] l : list){
+            if (l[0] == id) return true;
+        }
+        return false;
     }
 
     public int findIndex(int id) {
@@ -40,6 +48,7 @@ public class OrderManager {
                 Order o = new Order(id, now, tableId, sId);
                 orderList.add(o);
                 System.out.println("Created order with ID: " + id);
+                System.out.println("Table ID: " + tableId);
                 tManager.updateStatus(now, tableId, 2);
                 IOHandler.writeSerializedObject(FName, orderList);
             }
@@ -64,6 +73,7 @@ public class OrderManager {
                 Order o = new Order(id, now, tableId, sId);
                 orderList.add(o);
                 System.out.println("Created order with ID: " + id);
+                System.out.println("Table ID: " + tableId);
                 tManager.updateStatus(now, tableId, 2);
                 IOHandler.writeSerializedObject(FName, orderList);
             }
@@ -107,7 +117,7 @@ public class OrderManager {
         int oIndex = findIndex(orderId);
         int aIndex = alaManager.findIndex(alaCarteId);
         if (oIndex != -1 && aIndex != -1) {
-            if (orderList.get(oIndex).getAlaCarteIdNQtyList().contains(alaCarteId)) {
+            if (orderContains(orderList.get(oIndex).getAlaCarteIdNQtyList(), alaCarteId)) {
                 orderList.get(oIndex).removeItemAlaCarte(alaCarteId);
                 System.out.println("Ala Carte item deleted from order");
                 IOHandler.writeSerializedObject(FName, orderList);
@@ -122,7 +132,7 @@ public class OrderManager {
         int oIndex = findIndex(orderId);
         int pIndex = packManager.findIndex(packId);
         if (oIndex != -1 && pIndex != -1) {
-            if (orderList.get(oIndex).getPackageIdNQtyList().contains(packId)) {
+            if (orderContains(orderList.get(oIndex).getPackageIdNQtyList(), packId)) {
                 orderList.get(oIndex).removeItemPromo(packId);
                 System.out.println("Promotional Package item deleted from order");
                 IOHandler.writeSerializedObject(FName, orderList);
@@ -151,6 +161,7 @@ public class OrderManager {
     }
 
     public String viewOrder(int orderId) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         String ord = "";
         int oIndex = findIndex(orderId);
         List<Integer[]> alaIdList = orderList.get(oIndex).getAlaCarteIdNQtyList();
@@ -172,15 +183,20 @@ public class OrderManager {
             System.out.println(name + " x" + quantity + " ... " + price * quantity);
             ord = ord + name + " x" + quantity + " ... " + price * quantity + "\n";
         }
+        if (stackTraceElements[2].getClassName() != "OrderManager")
+            System.out.println("Paid: " + orderList.get(oIndex).isPaid());
         return ord;
     }
 
     public void printInvoice(int orderId) {
+        DecimalFormat numberFormat = new DecimalFormat("0.00");
         int oIndex = findIndex(orderId);
         int tableId = orderList.get(oIndex).getTableId();
         Calendar cal = orderList.get(oIndex).getDateTime();
         String invoice = "";
-        double total;
+        double total = CalculateTotal(orderId);
+        double gst = total * 0.07;
+        double service = total * 0.1;
         System.out.println("	Delicious Food Restaurant	");
         invoice = invoice + ("    Delicious Food Restaurant   \n");
         System.out.println("		12 Newton Street		");
@@ -206,22 +222,22 @@ public class OrderManager {
         System.out.println("		  " + year + "-" + (month + 1) + "-" + day + " " + hour + ":" + minute + ":" + second);
         invoice = invoice + ("		  " + year + "-" + (month + 1) + "-" + day + " " + hour + ":" + minute + ":" + second + "\n");
         invoice = invoice + viewOrder(orderId);
-        total = CalculateTotal(orderId);
         System.out.println("Subtotal.....		" + total);
         invoice = invoice + ("Subtotal.....		" + total + "\n");
-        System.out.println("10% Service Charge	" + 0.1 * total);
-        invoice = invoice + ("10% Service Charge	" + 0.1 * total + "\n");
-        total = total + 0.1 * total;
-        System.out.println("7% GST				" + 0.07 * total);
-        invoice = invoice + ("7% GST				" + 0.07 * total + "\n");
-        total = total + 0.07 * total;
+        System.out.println("10% Service Charge	" + numberFormat.format(service));
+        invoice = invoice + ("10% Service Charge	" + numberFormat.format(service) + "\n");
+        System.out.println("7% GST				" + numberFormat.format(gst));
+        invoice = invoice + ("7% GST				" + numberFormat.format(gst) + "\n");
+        total = total + gst + service;
         System.out.println("___________________________________");
         invoice = invoice + ("___________________________________\n");
-        System.out.println("Total				" + total);
-        invoice = invoice + ("Total				" + total + "\n");
+        System.out.println("Total				" + numberFormat.format(total));
+        invoice = invoice + ("Total				" + numberFormat.format(total) + "\n");
 
+        orderList.get(oIndex).setPaid();
         IOHandler.writeStringToTxtFile(String.valueOf(orderId), invoice);
         tManager.updateStatus(cal, tableId, 0);
+        IOHandler.writeSerializedObject(FName, orderList);
     }
 
     public void salesRevenueReport(Calendar start, Calendar end) {
@@ -239,7 +255,8 @@ public class OrderManager {
         for (Order o : orderList) {
             if (sYear <= o.getDateTime().get(Calendar.YEAR) && eYear >= o.getDateTime().get(Calendar.YEAR) &&
                     sMonth <= o.getDateTime().get(Calendar.MONTH) && eMonth >= o.getDateTime().get(Calendar.MONTH) &&
-                    sDate <= o.getDateTime().get(Calendar.DAY_OF_MONTH) && eDate >= o.getDateTime().get(Calendar.DAY_OF_MONTH)) {
+                    sDate <= o.getDateTime().get(Calendar.DAY_OF_MONTH) && eDate >= o.getDateTime().get(Calendar.DAY_OF_MONTH) &&
+                    o.isPaid()) {
                 total = total + CalculateTotal(o.getOrderId());
                 for (int j = 0; j < o.getAlaCarteIdNQtyList().size(); j++) {
                     List<Integer[]> alaCarte = o.getAlaCarteIdNQtyList();
@@ -253,11 +270,11 @@ public class OrderManager {
         }
         for (int i = 1; i <= alaManager.menuSize(); i++) {
             String name = alaManager.getAlaCarteById(i).getName();
-            System.out.println(name + " x" + qtyAlaCarte[i] + " ... " + alaManager.getAlaCarteById(i).getPrice());
+            System.out.println(name + " x" + qtyAlaCarte[i] + " ... " + alaManager.getAlaCarteById(i).getPrice() * qtyAlaCarte[i]);
         }
         for (int i = 1; i <= packManager.menuSize(); i++) {
             String name = "Package " + i;
-            System.out.println(name + " x" + qtyPackage[i] + " ... " + packManager.getPromoById(i).getPrice());
+            System.out.println(name + " x" + qtyPackage[i] + " ... " + packManager.getPromoById(i).getPrice() * qtyPackage[i]);
         }
         System.out.println("Total Revenue " + total);
     }
@@ -268,7 +285,7 @@ public class OrderManager {
         float total = 0;
         System.out.println("Sales Report: Month " + (month + 1));
         for (Order o : orderList) {
-            if (month == o.getDateTime().get(Calendar.MONTH)) {
+            if (month == o.getDateTime().get(Calendar.MONTH) && o.isPaid()) {
                 total = total + CalculateTotal(o.getOrderId());
                 for (int j = 0; j < o.getAlaCarteIdNQtyList().size(); j++) {
                     List<Integer[]> alaCarte = o.getAlaCarteIdNQtyList();
@@ -282,11 +299,11 @@ public class OrderManager {
         }
         for (int i = 1; i <= alaManager.menuSize(); i++) {
             String name = alaManager.getAlaCarteById(i).getName();
-            System.out.println(name + " x" + qtyAlaCarte[i] + " ... " + alaManager.getAlaCarteById(i).getPrice());
+            System.out.println(name + " x" + qtyAlaCarte[i] + " ... " + alaManager.getAlaCarteById(i).getPrice() * qtyAlaCarte[i]);
         }
         for (int i = 1; i <= packManager.menuSize(); i++) {
             String name = "Package " + i;
-            System.out.println(name + " x" + qtyPackage[i] + " ... " + packManager.getPromoById(i).getPrice());
+            System.out.println(name + " x" + qtyPackage[i] + " ... " + packManager.getPromoById(i).getPrice() * qtyPackage[i]);
         }
         System.out.println("Total Revenue " + total);
     }
